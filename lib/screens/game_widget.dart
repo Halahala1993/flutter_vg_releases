@@ -14,9 +14,9 @@ class GameWidget extends StatelessWidget {
         '${game.id}',
         style: TextStyle(fontSize: 10.0),
       ),
-      title: Text(game.title),
+      title: Text(game.name),
       isThreeLine: true,
-      subtitle: Text(game.body),
+      subtitle: game.description == null ? Text("") : Text(game.description),
       dense: true,
     );
   }

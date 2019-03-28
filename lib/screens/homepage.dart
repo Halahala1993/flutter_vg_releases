@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/screens/bottomloader.dart';
 import 'package:video_game_releases/screens/game_widget.dart';
+import 'package:video_game_releases/utils/app_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,15 +15,61 @@ class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
   final GameBloc _gameBloc = GameBloc();
   final _scrollThreshold = 200.0;
+  String apiKey = "";
 
   _HomePageState() {
     _scrollController.addListener(_onScroll);
-    _gameBloc.dispatch(Fetch());
+  }
+
+
+  AlertDialog buildApiKeyInputDialog() {
+  return AlertDialog(
+    title: Text("Enter GiantBomb API key"),
+    content: TextField(
+      onChanged: (value) {
+        apiKey = value;
+      },
+    ),
+    actions: <Widget>[
+      new FlatButton(
+        child: new Text("Ok"),
+        onPressed: () {
+          if (this.apiKey.isEmpty) {
+            buildApiKeyInputDialog();
+          } else {
+            AppPreferences.saveGBApiKey(apiKey);
+            _gameBloc.dispatch(Fetch());
+            Navigator.of(context).pop();
+
+          }
+        },
+      ),
+      new FlatButton(
+        child: new Text("Cancel"),
+        onPressed: () {
+          //Exit app since we need API to do anything
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        },
+      ),
+    ],
+  );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => buildApiKeyInputDialog(),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+
+   return BlocBuilder(
       bloc: _gameBloc,
       builder: (BuildContext context, GameState state) {
         if (state is GameUninitialized) {
@@ -54,8 +102,17 @@ class _HomePageState extends State<HomePage> {
         }
       },
     );
-  }
+  } 
 
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+
+        buildApiKeyInputDialog();
+    });
+  }
+  
   @override
   void dispose() {
     _gameBloc.dispose();

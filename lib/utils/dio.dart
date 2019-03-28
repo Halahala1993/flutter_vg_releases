@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:video_game_releases/utils/app_preferences.dart';
+import 'package:video_game_releases/utils/constants.dart';
 
 class GameDio extends Dio{
-  static Dio dio;
   static final GameDio _singleton = new GameDio._internal();
 
   factory GameDio() {
@@ -9,7 +10,6 @@ class GameDio extends Dio{
   }
 
   GameDio._internal() {
-    dio = new Dio();
-    //dio.options.headers = {"content-type": "application/json"};
+    options.baseUrl = "https://www.giantbomb.com/api/";
   }
 }
