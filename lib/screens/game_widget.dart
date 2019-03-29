@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/utils/platform_badge_builder.dart';
 
 class GameWidget extends StatelessWidget {
   final Game game;
   Color mainColor = const Color(0xff3C3261);
+  BuildContext _context;
 
   GameWidget({Key key, @required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    this._context =context;
+
     return new Column(
       children: <Widget>[
         new Row(
@@ -39,7 +44,7 @@ class GameWidget extends StatelessWidget {
                           fontFamily: 'Arvo'
                       ),
                     ),
-                    // determineButtonForCard()
+                    buildPlatformBadge()
                   ],
                     crossAxisAlignment: CrossAxisAlignment.start,),
                 )
@@ -51,6 +56,24 @@ class GameWidget extends StatelessWidget {
           height: 0.5,
           color: const Color(0xD2D2E1ff),
           margin: const EdgeInsets.all(16.0),
+        )
+      ],
+    );
+  }
+
+  Widget buildPlatformBadge() {
+    List<Widget> children = new List();
+    
+    for (var platform in game.platforms) {
+      children.add(PlatformBadgeBuilder.buildPlatformBadge(platform.abbreviation));
+    }
+
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(itemBuilder: (context, index){
+            return children[index];
+          }),
         )
       ],
     );
