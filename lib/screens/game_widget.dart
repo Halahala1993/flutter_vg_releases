@@ -4,20 +4,86 @@ import 'package:video_game_releases/models/game.dart';
 
 class GameWidget extends StatelessWidget {
   final Game game;
+  Color mainColor = const Color(0xff3C3261);
 
-  const GameWidget({Key key, @required this.game}) : super(key: key);
+  GameWidget({Key key, @required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text(
-        '${game.id}',
-        style: TextStyle(fontSize: 10.0),
-      ),
-      title: Text(game.name),
-      isThreeLine: true,
-      subtitle: game.deck == null ? Text("No description available") : Text(game.deck),
-      dense: true,
+    return new Column(
+      children: <Widget>[
+        new Row(
+          children: <Widget>[
+            new Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: buildGameIcon(),
+            ),
+            new Expanded(
+                child: new Container(
+                  margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                  child: new Column(children: [
+                    new Text(
+                      game.name,
+                      style: new TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: 'Arvo',
+                          fontWeight: FontWeight.bold),
+                    ),
+                    new Padding(padding: const EdgeInsets.all(2.0)),
+                    
+                    game.deck == null ? Text("No description available") : new Text(game.deck,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: new TextStyle(
+                          color: const Color(0xff8785A4),
+                          fontFamily: 'Arvo'
+                      ),
+                    ),
+                    // determineButtonForCard()
+                  ],
+                    crossAxisAlignment: CrossAxisAlignment.start,),
+                )
+            ),
+          ],
+        ),
+        new Container(
+          width: 300.0,
+          height: 0.5,
+          color: const Color(0xD2D2E1ff),
+          margin: const EdgeInsets.all(16.0),
+        )
+      ],
     );
   }
+
+  Widget buildGameIcon() {
+    String gameThumbUrl = game.image.thumbUrl;
+    return Hero(
+      transitionOnUserGestures: true,
+      tag: "movie_poster" + (game.id.toString()),
+      child: new Container(
+        margin: const EdgeInsets.fromLTRB(4, 10, 4, 10),
+        child: new Container(
+          width: 64.0,
+          height: 80.0,
+        ),
+        decoration: new BoxDecoration(
+          borderRadius: new BorderRadius.circular(1.0),
+          color: Colors.grey,
+          image: new DecorationImage(
+              image: new NetworkImage(
+                  gameThumbUrl
+              ),
+              fit: BoxFit.cover),
+          boxShadow: [
+            new BoxShadow(
+                color: mainColor,
+                blurRadius: 1.0,
+                offset: new Offset(2.0, 5.0))
+          ],
+        ),
+      ),
+    );
+  }
+ 
 }

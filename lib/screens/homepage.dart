@@ -100,11 +100,14 @@ class _HomePageState extends State<HomePage> {
                 child: Text('no games'),
               );
             }
+
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.games.length
-                    ? BottomLoader()
-                    : GameWidget(game: state.games[index]);
+                return index >= state.games.length ? BottomLoader() : FlatButton(
+                      child: GameWidget(game: state.games[index]), 
+                      onPressed: () {
+                        //Navigate to detail screen
+                      });
               },
               itemCount: state.hasReachedMax
                   ? state.games.length
