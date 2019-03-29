@@ -16,7 +16,7 @@ class GameWidget extends StatelessWidget {
       ),
       title: Text(game.name),
       isThreeLine: true,
-      subtitle: game.description == null ? Text("") : Text(game.description),
+      subtitle: game.deck == null ? Text("No description available") : Text(game.deck),
       dense: true,
     );
   }

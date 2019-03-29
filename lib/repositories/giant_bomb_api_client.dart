@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:video_game_releases/models/filters.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/giant_bomb_response.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
@@ -22,13 +23,18 @@ class GiantBombApiClient {
   }
 
   Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit) async {
-    final response = await dio.get(
-        'games/?format=json&' + 
+    final String filters = Filters.getFilters();
+    final String url = 'games/?format=json&' + 
         'filter=original_release_date:2019-01-01|2019-02-28&' + 
         'sort=original_release_date:desc&' + 
         'limit=$limit&' + 
         'offset=$startIndex&' + 
-        'api_key=$apiKey');
+        '$filters&'+
+        'api_key=$apiKey';
+
+    print("Generate URL: " + url);
+
+    final response = await dio.get(url);
     if (response.statusCode == 200) {
       final data = response.data;
       List<Game> games = new List<Game>();

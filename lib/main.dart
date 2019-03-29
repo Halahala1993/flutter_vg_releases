@@ -16,9 +16,6 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Infinite Scroll',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Posts'),
-        ),
         body: HomePage(),
       ),
     );
