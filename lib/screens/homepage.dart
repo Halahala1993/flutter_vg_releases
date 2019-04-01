@@ -63,12 +63,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => buildApiKeyInputDialog(),
-      );
+
+    AppPreferences.getGBApiKey().then((apiKey) {
+      if (apiKey != null && apiKey.isNotEmpty) {
+        this.apiKey = apiKey;
+        _gameBloc.dispatch(Fetch());
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => buildApiKeyInputDialog(),
+          );
+        });
+      }
     });
+
   }
 
   @override

@@ -63,19 +63,27 @@ class GameWidget extends StatelessWidget {
 
   Widget buildPlatformBadge() {
     List<Widget> children = new List();
-    
+
+    if (game.platforms == null) {
+      return Container();
+    }
+
     for (var platform in game.platforms) {
-      children.add(PlatformBadgeBuilder.buildPlatformBadge(platform.abbreviation));
+
+      if (platform.abbreviation != null) {
+        children.add(
+            Expanded(
+                child: PlatformBadgeBuilder.buildPlatformBadge(
+                    platform.abbreviation)
+            )
+        );
+      }
     }
 
     return Row(
-      children: <Widget>[
-        Expanded(
-          child: ListView.builder(itemBuilder: (context, index){
-            return children[index];
-          }),
-        )
-      ],
+      crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: children
     );
   }
 

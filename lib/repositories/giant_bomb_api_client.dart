@@ -13,10 +13,10 @@ class GiantBombApiClient {
   // String apiKey = "";
 
   GiantBombApiClient() {
-    saveApiKey();
+    getGBApiKey();
   }
 
-  saveApiKey() {
+  getGBApiKey() {
     AppPreferences.getGBApiKey().then((apiKey) {
       this.apiKey = apiKey;  
     });
@@ -24,17 +24,19 @@ class GiantBombApiClient {
 
   Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit) async {
     final String filters = Filters.getFilters();
-    final String url = 'games/?format=json&' + 
-        'filter=original_release_date:2019-01-01|2019-02-28&' + 
-        'sort=original_release_date:desc&' + 
-        'limit=$limit&' + 
-        'offset=$startIndex&' + 
+    final String url = 'games/?format=json&' +
+        'filter=original_release_date:2019-01-01|2019-02-28&' +
+        'sort=original_release_date:desc&' +
+        'limit=$limit&' +
+        'offset=$startIndex&' +
         '$filters&'+
         'api_key=$apiKey';
 
     print("Generate URL: " + url);
 
-    final response = await dio.get(url);
+    final localTestUrl = "https://api.myjson.com/bins/1gptqa";
+
+    final response = await dio.get(localTestUrl);
     if (response.statusCode == 200) {
       final data = response.data;
       List<Game> games = new List<Game>();
