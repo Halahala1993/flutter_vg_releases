@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/utils/platform_badge_builder.dart';
 
 class GameWidget extends StatelessWidget {
   final Game game;
+  final GameBloc gameBloc;
   Color mainColor = const Color(0xff3C3261);
   BuildContext _context;
 
-  GameWidget({Key key, @required this.game}) : super(key: key);
+  GameWidget({Key key, @required this.game, this.gameBloc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

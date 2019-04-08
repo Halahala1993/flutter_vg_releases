@@ -34,9 +34,9 @@ class GiantBombApiClient {
 
     print("Generate URL: " + url);
 
-    final localTestUrl = "https://api.myjson.com/bins/1gptqa";
+    //final localTestUrl = "https://api.myjson.com/bins/1gptqa";
 
-    final response = await dio.get(localTestUrl);
+    final response = await dio.get(url);
     if (response.statusCode == 200) {
       final data = response.data;
       List<Game> games = new List<Game>();
@@ -48,5 +48,19 @@ class GiantBombApiClient {
     } else {
       throw Exception('error fetching games');
     }
+  }
+
+  Future<Game> retrieveGameDetailsByGameId(int gameId) async {
+
+    final reponse = await dio.get("game/$gameId/?api_key=$apiKey");
+
+    if (reponse.statusCode == 200) {
+      final Game game = reponse.data;
+
+      return game;
+    } else {
+      throw Exception("Error while retrieving game with id: $gameId");
+    }
+
   }
 }

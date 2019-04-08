@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_game_releases/models/enums.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class PlatformBadgeBuilder {
 
@@ -8,14 +9,18 @@ class PlatformBadgeBuilder {
     String platformName = platform.toString().replaceAll("Abbreviation.", "");
 
     if (platformName == null || platformName.isEmpty || platformName == "null") {
-      return Container();
+      return Container(
+        alignment: Alignment.bottomRight
+      );
     } else {
       return Container(
           height: 30,
           width: 40,
           alignment: Alignment.bottomRight,
           child: new RaisedButton(
-            child: new Text(platformName, textScaleFactor: .9,),
+            child: new AutoSizeText(
+              platformName, 
+              maxLines: 1,),
             color: determineBadgeColor(platform),
             elevation: 2.0,
             onPressed: () {

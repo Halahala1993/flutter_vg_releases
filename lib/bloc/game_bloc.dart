@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
+import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/repositories/giant_bomb_api_client.dart';
 import 'package:video_game_releases/repositories/giant_bomb_repository.dart';
 import 'package:video_game_releases/utils/dio.dart';
@@ -22,7 +23,29 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   @override
   Stream<GameState> mapEventToState(GameEvent event) async* {
     if (event is Fetch && !_hasReachedMax(currentState)) {
-      try {
+      yield* _mapLoadGames(event);
+    } else if  (event is FetchGameDetail) {
+      yield* _mapGameDetail(event);
+    }
+  }
+
+  Stream<GameState> _mapGameDetail(FetchGameDetail detailEvent) async* {
+
+    try {
+      final Game game = await giantBombRepository.retrieveGameDetailsByGameId(detailEvent.gameId);
+
+      List<Game> tmp = List();
+      tmp.add(game);
+      yield GameLoaded(games: tmp, hasReachedMax: false);
+  
+      return;
+    } catch (_) {
+      yield GameError();
+    }
+  }
+
+  Stream<GameState> _mapLoadGames(GameEvent event) async* {
+    try {
         if (currentState is GameUninitialized) {
           final games = await giantBombRepository.getListOfRecentGameReleases(0, 20);
           yield GameLoaded(games: games, hasReachedMax: false);
@@ -40,10 +63,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
       } catch (_) {
         yield GameError();
-
-        
       }
-    }
   }
 
   bool _hasReachedMax(GameState state) =>
