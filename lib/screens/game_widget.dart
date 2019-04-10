@@ -1,7 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/utils/date_util.dart';
 import 'package:video_game_releases/utils/platform_badge_builder.dart';
 
 class GameWidget extends StatelessWidget {
@@ -36,9 +38,21 @@ class GameWidget extends StatelessWidget {
                           fontFamily: 'Arvo',
                           fontWeight: FontWeight.bold),
                     ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+
+                        Icon(Icons.calendar_today),
+                        new Text (
+                          DateUtil.resolveGameReleaseDate(this.game)
+                        )
+
+                    ],),
                     new Padding(padding: const EdgeInsets.all(2.0)),
                     
-                    game.deck == null ? Text("No description available") : new Text(game.deck,
+                    game.deck == null || game.deck.isEmpty ? Text("No description available") : new AutoSizeText(
+                      game.deck,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: new TextStyle(
@@ -90,15 +104,15 @@ class GameWidget extends StatelessWidget {
   }
 
   Widget buildGameIcon() {
-    String gameThumbUrl = game.image.thumbUrl;
+    String gameThumbUrl = game.image.screenLargeUrl;
     return Hero(
       transitionOnUserGestures: true,
       tag: "movie_poster" + (game.id.toString()),
       child: new Container(
-        margin: const EdgeInsets.fromLTRB(4, 10, 4, 10),
+        margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),
         child: new Container(
-          width: 64.0,
-          height: 80.0,
+          width: 106.0,
+          height: 96.0,
         ),
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.circular(1.0),

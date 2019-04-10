@@ -53,28 +53,28 @@ class Game {
 
     factory Game.fromJson(Map<String, dynamic> json) => new Game(
         aliases: json["aliases"] == null ? null : json["aliases"],
-        apiDetailUrl: json["api_detail_url"],
-        dateAdded: json["date_added"],
-        dateLastUpdated: json["date_last_updated"],
+        apiDetailUrl: json["api_detail_url"] == null ? null : json["api_detail_url"],
+        dateAdded: json["date_added"] == null ? null : json["date_added"],
+        dateLastUpdated: json["date_last_updated"] == null ? null : json["date_last_updated"],
         deck: json["deck"] == null ? null : json["deck"],
         description: json["description"] == null ? "No description Available" : json["description"].toString().substring(
             json['description'].toString().indexOf("<p>") + 3, 
             json['description'].toString().indexOf("</p>")
         ),
-        expectedReleaseDay: json["expected_release_day"],
-        expectedReleaseMonth: json["expected_release_month"],
-        expectedReleaseQuarter: json["expected_release_quarter"],
-        expectedReleaseYear: json["expected_release_year"],
-        guid: json["guid"],
-        id: json["id"],
-        image: Image.fromJson(json["image"]),
-        imageTags: new List<ImageTag>.from(json["image_tags"].map((x) => ImageTag.fromJson(x))),
-        name: json["name"],
-        numberOfUserReviews: json["number_of_user_reviews"],
+        expectedReleaseDay: json["expected_release_day"] == null ? null : json["expected_release_day"],
+        expectedReleaseMonth: json["expected_release_month"] == null ? null : json["expected_release_month"],
+        expectedReleaseQuarter: json["expected_release_quarter"] == null ? null : json["expected_release_quarter"],
+        expectedReleaseYear: json["expected_release_year"] == null ? null : json["expected_release_year"],
+        guid: json["guid"] == null ? null : json["guid"],
+        id: json["id"] == null ? null : json["id"],
+        image: json["image"] == null ? null : Image.fromJson(json["image"]),
+        imageTags:  json["image_tags"] == null ? null : new List<ImageTag>.from(json["image_tags"].map((x) => ImageTag.fromJson(x))),
+        name: json["name"]  == null ? null : json["name"],
+        numberOfUserReviews: json["number_of_user_reviews"]  == null ? null : json["number_of_user_reviews"],
         originalGameRating: json["original_game_rating"] == null ? null : new List<OriginalGameRating>.from(json["original_game_rating"].map((x) => OriginalGameRating.fromJson(x))),
-        originalReleaseDate: json["original_release_date"],
+        originalReleaseDate: json["original_release_date"] == null ? null : json["original_release_date"],
         platforms: json["platforms"] == null ? null : new List<Platform>.from(json["platforms"].map((x) => Platform.fromJson(x))),
-        siteDetailUrl: json["site_detail_url"],
+        siteDetailUrl: json["site_detail_url"] == null ? null : json["site_detail_url"],
     );
 
     Map<String, dynamic> toJson() => {

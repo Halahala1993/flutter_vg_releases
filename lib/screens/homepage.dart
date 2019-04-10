@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/enums.dart';
-import 'package:video_game_releases/models/filters.dart';
 import 'package:video_game_releases/screens/bottomloader.dart';
 import 'package:video_game_releases/screens/game_widget.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
+import 'package:video_game_releases/utils/filters.dart';
 
 class HomePage extends StatefulWidget {
   @override

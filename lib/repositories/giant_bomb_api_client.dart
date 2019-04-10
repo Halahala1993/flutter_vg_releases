@@ -1,11 +1,13 @@
 import 'dart:convert';
-
-import 'package:video_game_releases/models/filters.dart';
+import 'package:intl/intl.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/giant_bomb_response.dart';
+import 'package:video_game_releases/models/releases.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
 import 'package:video_game_releases/utils/constants.dart';
+import 'package:video_game_releases/utils/date_util.dart';
 import 'package:video_game_releases/utils/dio.dart';
+import 'package:video_game_releases/utils/filters.dart';
 
 class GiantBombApiClient {
   final dio = GameDio();
@@ -24,9 +26,12 @@ class GiantBombApiClient {
 
   Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit) async {
     final String filters = Filters.getFilters();
+
+    String dateFilter = DateUtil.retrieveDateFilter();
+
     final String url = 'games/?format=json&' +
-        'filter=original_release_date:2019-01-01|2019-02-28&' +
-        'sort=original_release_date:desc&' +
+        'filter=original_release_date:$dateFilter&' +
+        'sort=original_release_date:asc&' +
         'limit=$limit&' +
         'offset=$startIndex&' +
         '$filters&'+
@@ -42,9 +47,10 @@ class GiantBombApiClient {
       List<Game> games = new List<Game>();
       GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
 
-      games = giantBombResponse.games;
+      games = giantBombResponse.results;
 
       return games;
+
     } else {
       throw Exception('error fetching games');
     }

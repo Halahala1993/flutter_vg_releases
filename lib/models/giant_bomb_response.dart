@@ -1,4 +1,5 @@
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/models/releases.dart';
 
 class GiantBombResponse {
     String error;
@@ -7,7 +8,7 @@ class GiantBombResponse {
     int numberOfPageResults;
     int numberOfTotalResults;
     int statusCode;
-    List<Game> games;
+    List<dynamic> results;
     String version;
 
     GiantBombResponse({
@@ -17,7 +18,7 @@ class GiantBombResponse {
         this.numberOfPageResults,
         this.numberOfTotalResults,
         this.statusCode,
-        this.games,
+        this.results,
         this.version,
     });
 
@@ -26,9 +27,9 @@ class GiantBombResponse {
         limit: json["limit"],
         offset: json["offset"],
         numberOfPageResults: json["number_of_page_results"],
-        numberOfTotalResults: json["number_of_total_results"],
+        numberOfTotalResults: json["number_of_total_results"] is int ? json["number_of_total_results"] : int.parse(json["number_of_total_results"]),
         statusCode: json["status_code"],
-        games: new List<Game>.from(json["results"].map((x) => Game.fromJson(x))),
+        results: json["results"][0]["game"] == null ? new List<Game>.from(json["results"].map((x) => Game.fromJson(x))) : new List<Releases>.from(json["results"].map((x) => Releases.fromJson(x))),
         version: json["version"],
     );
 
@@ -39,7 +40,7 @@ class GiantBombResponse {
         "number_of_page_results": numberOfPageResults,
         "number_of_total_results": numberOfTotalResults,
         "status_code": statusCode,
-        "games": new List<dynamic>.from(games.map((x) => x.toJson())),
+        "games": new List<dynamic>.from(results.map((x) => x.toJson())),
         "version": version,
     };
 }

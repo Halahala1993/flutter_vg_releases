@@ -16,11 +16,11 @@ class Platform {
     });
 
     factory Platform.fromJson(Map<String, dynamic> json) => new Platform(
-        apiDetailUrl: json["api_detail_url"],
-        id: json["id"],
-        name: nameValues.map[json["name"]],
-        siteDetailUrl: json["site_detail_url"],
-        abbreviation: abbreviationValues.map[json["abbreviation"]],
+        apiDetailUrl: json["api_detail_url"] == null ? null : json["api_detail_url"],
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : nameValues.map[json["name"]],
+        siteDetailUrl: json["site_detail_url"] == null ? null : json["site_detail_url"],
+        abbreviation: json["abbreviation"] == null ? null : abbreviationValues.map[json["abbreviation"]],
     );
 
     Map<String, dynamic> toJson() => {

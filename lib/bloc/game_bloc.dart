@@ -34,9 +34,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     try {
       final Game game = await giantBombRepository.retrieveGameDetailsByGameId(detailEvent.gameId);
 
-      List<Game> tmp = List();
-      tmp.add(game);
-      yield GameLoaded(games: tmp, hasReachedMax: false);
+      // List<Game> tmp = List();
+      // tmp.add(game);
+      // yield GameLoaded(games: tmp, hasReachedMax: false);
   
       return;
     } catch (_) {

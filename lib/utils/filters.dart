@@ -5,7 +5,7 @@ class Filters {
   
   static void preparePlatformFilter(int platformId) {
     if (platformFilter == null || platformFilter.isEmpty) {
-      platformFilter = "&platforms=$platformId";
+      platformFilter = "platforms=$platformId";
     } else {
       platformFilter += "|$platformId";
     }
@@ -26,7 +26,7 @@ class FilterIds {
   static const Map<Abbreviation, int> platformIds = ({
     Abbreviation.PS4 : 146, 
     Abbreviation.PC : 94, 
-    Abbreviation.XONE : 340, 
-    Abbreviation.NSW : 90, 
+    Abbreviation.XONE : 145, 
+    Abbreviation.NSW : 157, 
   });
 }
