@@ -9,7 +9,11 @@ class GiantBombRepository {
   GiantBombRepository({@required this.giantBombApiClient}) : assert(giantBombApiClient != null);
 
   Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit) async {
-    return await giantBombApiClient.getListOfRecentGameReleases(startIndex, limit);
+    return await giantBombApiClient.getListOfRecentGameReleases(startIndex, limit, false);
+  }
+
+  Future<List<Game>> getListOfRecentGameReleasesFiltered(int startIndex, int limit) async {
+    return await giantBombApiClient.getListOfRecentGameReleases(startIndex, limit, true);
   }
 
   Future<Game> retrieveGameDetailsByGameId(int gameId) async {

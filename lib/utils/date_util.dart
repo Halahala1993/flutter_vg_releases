@@ -10,7 +10,7 @@ class DateUtil {
     String nowFormatted = formatDate(now);
     String futureFormatted = formatDate(future);
 
-    String dateFilter = "$nowFormatted|$futureFormatted";
+    String dateFilter = "original_release_date:$nowFormatted|$futureFormatted";
 
     return dateFilter;
   }
@@ -18,15 +18,18 @@ class DateUtil {
   static String resolveGameReleaseDate(Game game) {
     if (game.originalReleaseDate == null || game.originalReleaseDate.isEmpty) {
 
-      if (game.expectedReleaseYear == null && game.expectedReleaseMonth == null && game.expectedReleaseDay == null) {
-        return "Unknown";
-      } else if (game.expectedReleaseDay == null && game.expectedReleaseMonth == null && game.expectedReleaseQuarter != null) {
+      var year = game.expectedReleaseYear;
+      var quarter = game.expectedReleaseQuarter;
 
-        var year = game.expectedReleaseYear;
-        var quarter = game.expectedReleaseQuarter;
+      if (year == null && game.expectedReleaseMonth == null && game.expectedReleaseDay == null) {
+        return "Unknown";
+      } else if (game.expectedReleaseDay == null && game.expectedReleaseMonth == null && quarter != null) {
 
         return "Q$quarter $year";
-      } else {
+      } else if (game.expectedReleaseDay == null && game.expectedReleaseMonth == null && quarter == null && year != null) {
+
+        return "Y $year";
+      }else {
         String day = game.expectedReleaseDay.toString();
         String month = game.expectedReleaseMonth.toString();
         String year = game.expectedReleaseYear.toString();

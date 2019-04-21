@@ -24,17 +24,21 @@ class GiantBombApiClient {
     });
   }
 
-  Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit) async {
-    final String filters = Filters.getFilters();
+  Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit, bool filtered) async {
 
-    String dateFilter = DateUtil.retrieveDateFilter();
+    String filters;
+    if (filtered) {
+      filters = DateUtil.retrieveDateFilter() + Filters.getFilters();
+    } else {
+      Filters.clear();
+      filters = DateUtil.retrieveDateFilter();
+    }
 
     final String url = 'games/?format=json&' +
-        'filter=original_release_date:$dateFilter&' +
+        'filter=$filters&' +
         'sort=original_release_date:asc&' +
         'limit=$limit&' +
         'offset=$startIndex&' +
-        '$filters&'+
         'api_key=$apiKey';
 
     print("Generate URL: " + url);

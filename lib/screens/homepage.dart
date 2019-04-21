@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/enums.dart';
+import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/bottomloader.dart';
 import 'package:video_game_releases/screens/game_widget.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
@@ -20,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   BuildContext _context;
   String apiKey = "";
   bool filteredRequest = false;
+  Completer<void> _refreshCompleter;
 
   List<Abbreviation> checkedConsoles = new List<Abbreviation>();
 
@@ -64,6 +68,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _refreshCompleter = Completer<void>();
 
     AppPreferences.getGBApiKey().then((apiKey) {
       if (apiKey != null && apiKey.isNotEmpty) {
@@ -105,56 +110,61 @@ class _HomePageState extends State<HomePage> {
             );
           }
 
-          if (state is GameFiltered) {
-            if (state.games == null || state.games.isEmpty) {
-              return Center(
-                child: Text('no games'),
-              );
-            }
+          return Container(
+            child: buildAndDetermineGameListState(state),
+          );
 
-            return ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return index >= state.games.length ? BottomLoader() : FlatButton(
-                      child: GameWidget(game: state.games[index], gameBloc: _gameBloc,), 
-                      onPressed: () {
-                        //Navigate to detail screen
-                        //_gameBloc.dispatch(FetchGameDetail(state.games[index].id));
-
-                      });
-              },
-              itemCount: state.hasReachedMax
-                  ? state.games.length
-                  : state.games.length + 1,
-              controller: _scrollController,
-            );
-          } else if (state is GameLoaded) {
-            if (state.games == null || state.games.isEmpty) {
-              return Center(
-                child: Text('no games'),
-              );
-            }
-
-            return ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return index >= state.games.length ? BottomLoader() : FlatButton(
-                      child: GameWidget(game: state.games[index], gameBloc: _gameBloc,), 
-                      onPressed: () {
-                        //Navigate to detail screen
-                        //_gameBloc.dispatch(FetchGameDetail(state.games[index].id));
-
-                      });
-              },
-              itemCount: state.hasReachedMax
-                  ? state.games.length
-                  : state.games.length + 1,
-              controller: _scrollController,
-            );
-          }
         },
       )
     );
 
-  } 
+  }
+
+  Widget buildAndDetermineGameListState(GameState state) {
+
+    if (state is GameLoaded) {
+      return buildGameList(state.games, state.hasReachedMax);
+    } else if (state is GameFiltered) {
+     return  buildGameList(state.games, state.hasReachedMax);
+    } else {
+      return Container();
+    }
+  }
+
+  Widget buildGameList(List<Game> games, bool hasReachedMax) {
+    if (games.isEmpty) {
+      return Center(
+        child: Text('no games'),
+      );
+    }
+
+    _refreshCompleter?.complete();
+    _refreshCompleter = Completer();
+
+    return RefreshIndicator(
+      onRefresh: () {
+        _gameBloc.dispatch(
+            RefreshGameFetch(games: games)
+        );
+        return _refreshCompleter.future;
+      },
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return index >= games.length ? BottomLoader() : FlatButton(
+              child: GameWidget(game: games[index], gameBloc: _gameBloc,),
+              onPressed: () {
+                //Navigate to detail screen
+                //_gameBloc.dispatch(FetchGameDetail(games[index].id));
+
+              });
+        },
+        itemCount: hasReachedMax
+            ? games.length
+            : games.length + 1,
+        controller: _scrollController,
+      ),
+    );
+  }
 
   IconButton buildSearchBar() {
     return new IconButton(

@@ -5,7 +5,7 @@ class Filters {
   
   static void preparePlatformFilter(int platformId) {
     if (platformFilter == null || platformFilter.isEmpty) {
-      platformFilter = "platforms=$platformId";
+      platformFilter = ",platforms:$platformId";
     } else {
       platformFilter += "|$platformId";
     }

@@ -57,10 +57,7 @@ class Game {
         dateAdded: json["date_added"] == null ? null : json["date_added"],
         dateLastUpdated: json["date_last_updated"] == null ? null : json["date_last_updated"],
         deck: json["deck"] == null ? null : json["deck"],
-        description: json["description"] == null ? "No description Available" : json["description"].toString().substring(
-            json['description'].toString().indexOf("<p>") + 3, 
-            json['description'].toString().indexOf("</p>")
-        ),
+        description: json["description"] == null ? "No description Available" : json["description"],
         expectedReleaseDay: json["expected_release_day"] == null ? null : json["expected_release_day"],
         expectedReleaseMonth: json["expected_release_month"] == null ? null : json["expected_release_month"],
         expectedReleaseQuarter: json["expected_release_quarter"] == null ? null : json["expected_release_quarter"],
