@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   final _scrollThreshold = 200.0;
   BuildContext _context;
   String apiKey = "";
+  bool filteredRequest = false;
 
   List<Abbreviation> checkedConsoles = new List<Abbreviation>();
 
@@ -103,8 +104,31 @@ class _HomePageState extends State<HomePage> {
               child: Text('failed to fetch games'),
             );
           }
-          if (state is GameLoaded) {
-            if (state.games.isEmpty) {
+
+          if (state is GameFiltered) {
+            if (state.games == null || state.games.isEmpty) {
+              return Center(
+                child: Text('no games'),
+              );
+            }
+
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.games.length ? BottomLoader() : FlatButton(
+                      child: GameWidget(game: state.games[index], gameBloc: _gameBloc,), 
+                      onPressed: () {
+                        //Navigate to detail screen
+                        //_gameBloc.dispatch(FetchGameDetail(state.games[index].id));
+
+                      });
+              },
+              itemCount: state.hasReachedMax
+                  ? state.games.length
+                  : state.games.length + 1,
+              controller: _scrollController,
+            );
+          } else if (state is GameLoaded) {
+            if (state.games == null || state.games.isEmpty) {
               return Center(
                 child: Text('no games'),
               );
@@ -176,6 +200,7 @@ class _HomePageState extends State<HomePage> {
             Filters.preparePlatformFilter(platformId);
           }
           //Filters.preparePlatformFilter(platformId);
+          filteredRequest = true;
           retrieveGameList();
           Navigator.of(context).pop();
         },
@@ -184,6 +209,7 @@ class _HomePageState extends State<HomePage> {
         child: new Text("Clear"),
         onPressed: () {
           this.checkedConsoles.clear();
+          filteredRequest = false;
           Filters.clear();
           //Exit app since we need API to do anything
           Navigator.of(context).pop();
@@ -204,7 +230,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   retrieveGameList() {
-     _gameBloc.dispatch(Fetch());
+    if (filteredRequest) {
+      _gameBloc.dispatch(FetchFilteredList());
+    } else {
+      _gameBloc.dispatch(Fetch());
+    }
   }
 
   handleCheckState(bool checked, Abbreviation value) {

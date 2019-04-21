@@ -10,6 +10,11 @@ class Fetch extends GameEvent {
   String toString() => 'Fetch';
 }
 
+class FetchFilteredList extends GameEvent {
+  @override
+  String toString() => 'FetchFilteredList';
+}
+
 class FetchGameDetail extends GameEvent {
   final int gameId;
 
