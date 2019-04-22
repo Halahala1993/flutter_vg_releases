@@ -71,3 +71,19 @@ final nameValues = new EnumValues({
     "Xbox": Name.XBOX,
     "Xbox One": Name.XBOX_ONE
 });
+
+enum Categories {VIDEOS, IMAGES, SIMILAR_GAMES, CHARACTERS}
+
+//final categoryValues = new EnumValues({
+//   "Videos" : Categories.VIDEOS,
+//   "Images" : Categories.IMAGES,
+//   "Similar Games" : Categories.SIMILAR_GAMES,
+//   "Characters" : Categories.CHARACTERS,
+//});
+
+final Map<Categories, String> categoryValues = ({
+    Categories.VIDEOS : "Videos",
+    Categories.IMAGES : "Images",
+    Categories.SIMILAR_GAMES : "Similar Games",
+    Categories.CHARACTERS : "Characters",
+});

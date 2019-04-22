@@ -7,6 +7,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
+import 'package:video_game_releases/models/enums.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/homepage.dart';
@@ -36,6 +37,8 @@ class GameDetailState extends State<GameDetailScreen> {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GameBloc _gameBloc = GameBloc();
 
+  bool gameDetailRetrieved  = false;
+
   String gamePosterPath;
   String appBarImage;
 
@@ -60,6 +63,8 @@ class GameDetailState extends State<GameDetailScreen> {
               this.game = state.game;
 
               setupSimilarGames(this.game);
+
+              gameDetailRetrieved = true;
             }
           }
 
@@ -133,8 +138,14 @@ class GameDetailState extends State<GameDetailScreen> {
                             ))
                       ],
                     ),
-                    this.similarGames != null ? buildSectionHeader(Constants.SIMILAR_GAMES) : Container(),
-                    buildSimilarGamesList()
+                    //buildSectionTiles
+                    gameDetailRetrieved ? new Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        buildSectionTiles(),
+                      ],
+                    ) : new CircularProgressIndicator(),
                   ],
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
@@ -224,7 +235,16 @@ class GameDetailState extends State<GameDetailScreen> {
     );
   }
 
-  Row buildSimilarGamesList() {
+  Widget buildSimilarGamesList() {
+
+    if (this.game.similarGames == null || this.game.similarGames.isEmpty) {
+      return Container(
+        child: Text("No Similar Games Found"),
+      );
+    } else if (this.similarGames == null || this.similarGames.isEmpty){
+      return new CircularProgressIndicator();
+    }
+
     return new Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -372,6 +392,63 @@ class GameDetailState extends State<GameDetailScreen> {
             },
           );
         }));
+  }
+
+  Widget buildSectionTiles() {
+
+    return Expanded(
+        child: Container(
+          child: SingleChildScrollView(
+            child: new Column(
+              children: <Widget>[
+                ListView.builder(
+                  physics: ClampingScrollPhysics(),//Key to have page flow with nested scroll view (even tho it's not a nested scroll view)
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) =>
+                      buildSubSectionTile(Categories.values[index]),
+                  itemCount: Categories.values.length,
+                )
+              ],
+            ),
+          ),
+        )
+    );
+
+  }
+
+  Widget buildSubSectionTile(Categories category) {
+
+    Widget sectionWidget = CircularProgressIndicator();
+
+    switch(category) {
+      case Categories.VIDEOS :
+        print("");
+        break;
+      case Categories.IMAGES :
+        print("");
+        break;
+      case Categories.SIMILAR_GAMES :
+        //sectionWidget = this.similarGames != null ? buildSectionHeader(Constants.SIMILAR_GAMES) : Container();
+        sectionWidget =  buildSimilarGamesList();
+        break;
+      case Categories.CHARACTERS :
+        print("");
+        break;
+    }
+
+    return ExpansionTile(
+        key: PageStorageKey<Categories>(category),
+        title: Text(categoryValues[category].toString()),
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(top: 8, bottom: 8),
+              child: sectionWidget,
+            ),
+          )
+//        sectionWidget,
+        ]
+    );
   }
 
   setupSimilarGames(Game game) {

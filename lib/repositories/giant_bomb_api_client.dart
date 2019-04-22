@@ -82,11 +82,14 @@ class GiantBombApiClient {
     final response = await dio.get("games/?format=json&filter=id:$gameIds&api_key=$apiKey");
 
     if (response.statusCode == 200) {
+
       final data = response.data;
       List<Game> games = new List<Game>();
       GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
 
       games = giantBombResponse.results;
+      print("Similar games returned: " + games.length.toString());
+
 
       return games;
 
