@@ -62,14 +62,36 @@ class GiantBombApiClient {
 
   Future<Game> retrieveGameDetailsByGameId(int gameId) async {
 
-    final reponse = await dio.get("game/$gameId/?api_key=$apiKey");
+    final response = await dio.get("game/$gameId/?format=json&api_key=$apiKey");
 
-    if (reponse.statusCode == 200) {
-      final Game game = reponse.data;
+    if (response.statusCode == 200) {
+
+      GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(response.data);
+
+      Game game = giantBombResponse.results[0];
 
       return game;
     } else {
       throw Exception("Error while retrieving game with id: $gameId");
+    }
+
+  }
+
+  Future<List<Game>> retrieveSimilarGamesWithIds(String gameIds) async {
+
+    final response = await dio.get("games/?format=json&filter=id:$gameIds&api_key=$apiKey");
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      List<Game> games = new List<Game>();
+      GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
+
+      games = giantBombResponse.results;
+
+      return games;
+
+    } else {
+      throw Exception("Error while retrieving game with ids: $gameIds");
     }
 
   }

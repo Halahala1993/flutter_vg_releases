@@ -29,8 +29,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     } else if (event is RefreshGameFetch) {
       yield* _mapRefreshGameList(event);
     } else if (event is FetchFilteredList) {
-      // yield GameLoaded.initial();
       yield* _mapFilteredGames(event);
+    } else if (event is FetchSimilarGames) {
+      yield* _mapSimilarGameList(event);
+    }
+  }
+
+  Stream<GameState> _mapSimilarGameList(FetchSimilarGames similarEvent) async* {
+    try {
+
+      final games = await giantBombRepository.retrieveSimilarGamesWithIds(similarEvent.gameIds);
+      yield SimilarGames(games: games);
+      return;
+
+    } catch (_) {
+      yield GameError();
     }
   }
 
@@ -62,11 +75,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     try {
       final Game game = await giantBombRepository.retrieveGameDetailsByGameId(detailEvent.gameId);
-
-      // List<Game> tmp = List();
-      // tmp.add(game);
-      // yield GameLoaded(games: tmp, hasReachedMax: false);
-
+      yield GameDetail(game: game);
       return;
     } catch (_) {
       yield GameError();

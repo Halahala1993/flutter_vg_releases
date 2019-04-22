@@ -71,3 +71,52 @@ class GameFiltered extends GameState {
   String toString() =>
       'GameFiltered { games: ${games.length}, hasReachedMax: $hasReachedMax }';
 }
+
+class GameDetail extends GameState {
+  final Game game;
+
+  GameDetail({
+    this.game
+  }) : super([game]);
+
+  factory GameDetail.initial() {
+    return GameDetail(game: null);
+  }
+
+  GameDetail copyWith({
+    Game game
+  }) {
+    return GameDetail(
+      game: game ?? this.game
+    );
+  }
+
+  @override
+  String toString() =>
+      'GameDetail { gameId: ${game.id} }';
+}
+
+class SimilarGames extends GameState {
+  final List<Game> games;
+
+  SimilarGames({
+    this.games
+  }) : super([games]);
+
+  factory SimilarGames.initial() {
+    return SimilarGames(games: null);
+  }
+
+  SimilarGames copyWith({
+    List<Game> games,
+    bool hasReachedMax,
+  }) {
+    return SimilarGames(
+      games: games ?? this.games
+    );
+  }
+
+  @override
+  String toString() =>
+      'SimilarGames { games: ${games.length} }';
+}

@@ -35,3 +35,13 @@ class RefreshGameFetch extends GameEvent {
   @override
   String toString() => 'RefreshGameFetch';
 }
+
+class FetchSimilarGames extends GameEvent {
+  final String gameIds;
+
+  FetchSimilarGames(this.gameIds);
+
+
+  @override
+  String toString() => 'FetchSimilarGames';
+}

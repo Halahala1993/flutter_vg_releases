@@ -19,5 +19,9 @@ class GiantBombRepository {
   Future<Game> retrieveGameDetailsByGameId(int gameId) async {
     return await giantBombApiClient.retrieveGameDetailsByGameId(gameId);
   }
-  
+
+  Future<List<Game>> retrieveSimilarGamesWithIds(String gameIds) async {
+    return await giantBombApiClient.retrieveSimilarGamesWithIds(gameIds);
+  }
+
 }

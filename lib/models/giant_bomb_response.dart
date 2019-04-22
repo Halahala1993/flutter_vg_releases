@@ -29,7 +29,7 @@ class GiantBombResponse {
         numberOfPageResults: json["number_of_page_results"],
         numberOfTotalResults: json["number_of_total_results"] is int ? json["number_of_total_results"] : int.parse(json["number_of_total_results"]),
         statusCode: json["status_code"],
-        results: json["results"][0]["game"] == null ? new List<Game>.from(json["results"].map((x) => Game.fromJson(x))) : new List<Releases>.from(json["results"].map((x) => Releases.fromJson(x))),
+        results: json["results"][1] == null ? returnSingleGameAsList(new Game.fromJson(json["results"])) :  new List<Game>.from(json["results"].map((x) => Game.fromJson(x))),
         version: json["version"],
     );
 
@@ -43,4 +43,12 @@ class GiantBombResponse {
         "games": new List<dynamic>.from(results.map((x) => x.toJson())),
         "version": version,
     };
+
+    static List<Game> returnSingleGameAsList(Game game) {
+        List<Game> games = new List();
+
+        games.add(game);
+
+        return games;
+    }
 }

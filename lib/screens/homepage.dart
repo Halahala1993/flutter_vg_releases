@@ -7,6 +7,7 @@ import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/enums.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/bottomloader.dart';
+import 'package:video_game_releases/screens/game_detail.dart';
 import 'package:video_game_releases/screens/game_widget.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
 import 'package:video_game_releases/utils/filters.dart';
@@ -155,6 +156,13 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 //Navigate to detail screen
                 //_gameBloc.dispatch(FetchGameDetail(games[index].id));
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GameDetailScreen(games[index], games[index].id.toString()),
+                  ),
+                );
 
               });
         },

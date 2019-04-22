@@ -107,7 +107,7 @@ class GameWidget extends StatelessWidget {
     String gameThumbUrl = game.image.screenLargeUrl;
     return Hero(
       transitionOnUserGestures: true,
-      tag: "movie_poster" + (game.id.toString()),
+      tag: "game_poster" + (game.id.toString()),
       child: new Container(
         margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),
         child: new Container(
