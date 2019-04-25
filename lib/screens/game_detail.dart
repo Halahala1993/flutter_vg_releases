@@ -10,6 +10,7 @@ import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/enums.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/screens/detail_screen/similar_games.dart';
 import 'package:video_game_releases/screens/homepage.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/date_util.dart';
@@ -258,107 +259,8 @@ class GameDetailState extends State<GameDetailScreen> {
     );
   }
 
-  Widget buildSimilarGamesList() {
 
-    if (this.game.similarGames == null || this.game.similarGames.isEmpty) {
-      return Container(
-        child: Text(Constants.NO_SIMILAR_GAMES_FOUND),
-      );
-    } else if (this.similarGames == null || this.similarGames.isEmpty){
-      return new CircularProgressIndicator();
-    }
-
-    return new Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        new Expanded(
-          child: new Container(
-            height: 250,
-            child: buildSimilarGamesListView(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildSimilarGamesListView() {
-    return ListView.builder(
-        key: PageStorageKey(game.name),//Required to get passed type bool is not subtype of double error.(scroll position error)
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: similarGames == null ? 0 : similarGames.length,
-        itemBuilder: (context, i) {
-          return new Column(
-            children: <Widget>[
-              new FlatButton(
-                child: new Padding(
-                  padding: const EdgeInsets.only(
-                      right: 8, left: 8, bottom: 8),
-                  child: buildSimilarGamePoster(i),
-                ),
-                padding: const EdgeInsets.all(0.0),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameDetailScreen(
-                          similarGames[i], i.toString()),
-                    ),
-                  );
-                },
-                color: Colors.white,
-              ),
-              new Container(
-                width: 100,
-                child: new AutoSizeText(
-                  this.similarGames[i].name,
-                  maxLines: 3,
-                  maxFontSize: 16,
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          );
-        });
-  }
-
-  Container buildSimilarGamePoster(int i) {
-    return new Container(
-      margin: const EdgeInsets.only(left: 2.0, right: 2.0),
-      child: new Container(
-        width: 100.0,
-        height: 155.0,
-      ),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.circular(1.0),
-        color: Colors.grey,
-        image: retrieveGamePoster(i),
-        boxShadow: [
-          new BoxShadow(
-              color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
-        ],
-      ),
-    );
-  }
-
-  DecorationImage retrieveGamePoster(int i) {
-    String gamePoster = similarGames[i].image.originalUrl;
-
-    if (gamePoster != null && gamePoster.isNotEmpty) {
-      return new DecorationImage(
-          image: new NetworkImage(gamePoster),
-          fit: BoxFit.cover);
-    } else {
-      return null;
-    }
-  }
-
-  SliverAppBar buildSliverAppBar() {
+   SliverAppBar buildSliverAppBar() {
     return SliverAppBar(
         expandedHeight: 200.0,
         floating: false,
@@ -479,7 +381,7 @@ class GameDetailState extends State<GameDetailScreen> {
         break;
       case Categories.SIMILAR_GAMES :
         //TODO: Test tile with different sized phones.
-        return buildSimilarGamesList();
+        return gameDetailRetrieved ? SimilarGamesList(similarGames: this.similarGames,) : Container();
         break;
       case Categories.CHARACTERS :
         //print("");
