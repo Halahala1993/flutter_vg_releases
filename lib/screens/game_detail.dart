@@ -73,7 +73,7 @@ class GameDetailState extends State<GameDetailScreen> {
               return new Container();
             } else {
               Fluttertoast.showToast(
-                  msg: "Error retrieving additional details",
+                  msg: Constants.ERROR_RETRIEVE_DETAILS,
                   backgroundColor: Colors.redAccent
               );
             }
@@ -98,7 +98,6 @@ class GameDetailState extends State<GameDetailScreen> {
                   children: <Widget>[
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         new Expanded(
                           child: new Container(
@@ -139,19 +138,33 @@ class GameDetailState extends State<GameDetailScreen> {
                       ],
                     ),
                     //buildSectionTiles
-                    gameDetailRetrieved ? new Row(
+                    !gameDetailRetrieved ? buildProgressIndicator(100, 100) : new Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         buildSectionTiles(),
                       ],
-                    ) : new CircularProgressIndicator(),
+                    ),
                   ],
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
               ));
         },
       )
+    );
+  }
+
+  Row buildProgressIndicator(double height, double width) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Container(
+          height: height,
+          width: width,
+          child: CircularProgressIndicator(),
+        )
+      ],
     );
   }
 
@@ -252,55 +265,61 @@ class GameDetailState extends State<GameDetailScreen> {
         new Expanded(
           child: new Container(
             height: 250,
-            child: new ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: similarGames == null ? 0 : similarGames.length,
-                itemBuilder: (context, i) {
-                  return new Column(
-                    children: <Widget>[
-                      new FlatButton(
-                        child: new Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8, left: 8, bottom: 14),
-                          child: buildSimilarGamePoster(i),
-                        ),
-                        padding: const EdgeInsets.all(0.0),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GameDetailScreen(
-                                  similarGames[i], i.toString()),
-                            ),
-                          );
-                        },
-                        color: Colors.white,
-                      ),
-                      new Container(
-                        width: 100,
-                        child: new AutoSizeText(
-                          this.similarGames[i].name,
-                          maxLines: 3,
-                          maxFontSize: 16,
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                }),
+            child: buildSimilarGamesListView(),
           ),
         ),
       ],
     );
   }
 
+  Widget buildSimilarGamesListView() {
+    return ListView.builder(
+        key: PageStorageKey(game.name),//Required to get passed type bool is not subtype of double error.(scroll position error)
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: similarGames == null ? 0 : similarGames.length,
+        itemBuilder: (context, i) {
+          return new Column(
+            children: <Widget>[
+              new FlatButton(
+                child: new Padding(
+                  padding: const EdgeInsets.only(
+                      right: 8, left: 8, bottom: 8),
+                  child: buildSimilarGamePoster(i),
+                ),
+                padding: const EdgeInsets.all(0.0),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameDetailScreen(
+                          similarGames[i], i.toString()),
+                    ),
+                  );
+                },
+                color: Colors.white,
+              ),
+              new Container(
+                width: 100,
+                child: new AutoSizeText(
+                  this.similarGames[i].name,
+                  maxLines: 3,
+                  maxFontSize: 16,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          );
+        });
+  }
+
   Container buildSimilarGamePoster(int i) {
     return new Container(
-      margin: const EdgeInsets.all(2.0),
+      margin: const EdgeInsets.only(left: 2.0, right: 2.0),
       child: new Container(
         width: 100.0,
         height: 155.0,
@@ -400,6 +419,8 @@ class GameDetailState extends State<GameDetailScreen> {
         child: Container(
           child: SingleChildScrollView(
             child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 ListView.builder(
                   physics: ClampingScrollPhysics(),//Key to have page flow with nested scroll view (even tho it's not a nested scroll view)
@@ -418,37 +439,46 @@ class GameDetailState extends State<GameDetailScreen> {
 
   Widget buildSubSectionTile(Categories category) {
 
-    Widget sectionWidget = CircularProgressIndicator();
-
-    switch(category) {
-      case Categories.VIDEOS :
-        print("");
-        break;
-      case Categories.IMAGES :
-        print("");
-        break;
-      case Categories.SIMILAR_GAMES :
-        //sectionWidget = this.similarGames != null ? buildSectionHeader(Constants.SIMILAR_GAMES) : Container();
-        sectionWidget =  buildSimilarGamesList();
-        break;
-      case Categories.CHARACTERS :
-        print("");
-        break;
-    }
-
     return ExpansionTile(
         key: PageStorageKey<Categories>(category),
         title: Text(categoryValues[category].toString()),
         children: <Widget>[
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(top: 8, bottom: 8),
-              child: sectionWidget,
-            ),
+          Container(
+            padding: EdgeInsets.only(top: 10, bottom: 5),
+            child: determineSubsectionWidget(category),
           )
-//        sectionWidget,
         ]
     );
+  }
+
+  Widget determineSubsectionWidget(Categories category) {
+    switch(category) {
+      case Categories.VIDEOS :
+        //print("");
+        return Container(
+          height: 200,
+          width: 200,
+        );
+        break;
+      case Categories.IMAGES :
+        //print("");
+        return Container(
+          height: 200,
+          width: 200,
+        );
+        break;
+      case Categories.SIMILAR_GAMES :
+        //TODO: Test tile with different sized phones.
+        return buildSimilarGamesList();
+        break;
+      case Categories.CHARACTERS :
+        //print("");
+        return Container(
+          height: 200,
+          width: 200,
+        );
+        break;
+    }
   }
 
   setupSimilarGames(Game game) {
@@ -465,8 +495,6 @@ class GameDetailState extends State<GameDetailScreen> {
     }
 
     return gameIds;
-    /*int index = gameIds.lastIndexOf("|");
-    return gameIds.substring(0, index);*/
   }
 
   @override

@@ -7,4 +7,7 @@ class Constants {
   //Detail Screen Section Headers
   static const String SUMMARY = "Summary";
   static const String SIMILAR_GAMES = "Similar Games";
+
+  //Errors:
+  static const String ERROR_RETRIEVE_DETAILS = "Error retrieving additional details";
 }
