@@ -197,10 +197,19 @@ class GameDetailState extends State<GameDetailScreen> {
   }
 
   Container buildGameOverview() {
+
+    String overview = this.game.deck;
+
+    print("overview: $overview");
+
+    if (overview == null || overview.trim().isEmpty) {
+      overview = Constants.NO_SUMMARY_FOUND;
+    }
+
     return new Container(
       padding: EdgeInsets.only(left: 25, right: 25),
       child: new Text(
-        this.game.deck,
+        overview,
         style: new TextStyle(
             color: Colors.black54, fontFamily: 'Arvo', fontSize: 18.0),
       ),
@@ -217,7 +226,8 @@ class GameDetailState extends State<GameDetailScreen> {
             color: Colors.black87,
             fontStyle: FontStyle.italic,
             fontSize: 24.0,
-            fontWeight: FontWeight.bold),
+            fontWeight: FontWeight.bold
+        ),
       ),
     );
   }
@@ -252,7 +262,7 @@ class GameDetailState extends State<GameDetailScreen> {
 
     if (this.game.similarGames == null || this.game.similarGames.isEmpty) {
       return Container(
-        child: Text("No Similar Games Found"),
+        child: Text(Constants.NO_SIMILAR_GAMES_FOUND),
       );
     } else if (this.similarGames == null || this.similarGames.isEmpty){
       return new CircularProgressIndicator();

@@ -109,10 +109,10 @@ class GameWidget extends StatelessWidget {
       transitionOnUserGestures: true,
       tag: "game_poster" + (game.id.toString()),
       child: new Container(
-        margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),
+        margin: const EdgeInsets.fromLTRB(0, 2, 1, 2),
         child: new Container(
-          width: 106.0,
-          height: 96.0,
+          width: 96.0,
+          height: 120.0,
         ),
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.circular(1.0),
