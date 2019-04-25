@@ -23,13 +23,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   @override
   Stream<GameState> mapEventToState(GameEvent event) async* {
     if (event is Fetch && !_hasReachedMax(currentState)) {
-      yield* _mapLoadGames(event);
+      yield* _mapLoadGames();
     } else if  (event is FetchGameDetail) {
       yield* _mapGameDetail(event);
     } else if (event is RefreshGameFetch) {
-      yield* _mapRefreshGameList(event);
+      yield* _mapRefreshGameList();
     } else if (event is FetchFilteredList) {
-      yield* _mapFilteredGames(event);
+      yield* _mapFilteredGames();
     } else if (event is FetchSimilarGames) {
       yield* _mapSimilarGameList(event);
     }
@@ -47,26 +47,28 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
-  Stream<GameState> _mapRefreshGameList(RefreshGameFetch refreshEvent) async* {
-    try {
-      (currentState as GameLoaded).games.clear();
+  Stream<GameState> _mapRefreshGameList() async* {
 
-      if (currentState is GameUninitialized || (currentState as GameLoaded).games.length == 0) {
+    try {
+
+      if (currentState is GameUninitialized || (currentState is GameLoaded && (currentState as GameLoaded).games.length == 0)) {
+        (currentState as GameLoaded).games.clear();
         final games = await giantBombRepository.getListOfRecentGameReleases(0, 20);
         yield GameLoaded(games: games, hasReachedMax: false);
         return;
       }
       if (currentState is GameLoaded) {
-        final games =
-        await giantBombRepository.getListOfRecentGameReleases((currentState as GameLoaded).games.length, 20);
-        yield games.isEmpty
-            ? (currentState as GameLoaded).copyWith(hasReachedMax: true)
-            : GameLoaded(
-          games: (currentState as GameLoaded).games + games,
-          hasReachedMax: false,
-        );
+        (currentState as GameLoaded).games.clear();
+        yield* _mapLoadGames();
+      }
+
+      if (currentState is GameFiltered) {
+        (currentState as GameFiltered).games.clear();
+        yield* _mapFilteredGames();
       }
     } catch (_) {
+      print("Error while refreshing game list: " + _.toString());
+
       yield GameError();
     }
   }
@@ -78,11 +80,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       yield GameDetail(game: game);
       return;
     } catch (_) {
+      print("Error while retrieving detail: " + _.toString());
       yield GameError();
     }
   }
 
-  Stream<GameState> _mapLoadGames(GameEvent event) async* {
+  Stream<GameState> _mapLoadGames() async* {
     try {
 
       if (currentState is GameUninitialized) {
@@ -90,8 +93,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         yield GameLoaded(games: games, hasReachedMax: false);
         return;
       }
-      if (currentState is GameLoaded || currentState is GameFiltered) {
+
+      if (currentState is GameFiltered) {
+
         (currentState as GameFiltered).games.clear();
+
+        final games = await giantBombRepository.getListOfRecentGameReleases(0, 20);
+        yield GameLoaded(games: games, hasReachedMax: false);
+        return;
+      }
+
+      if (currentState is GameLoaded) {
         final games =
             await giantBombRepository.getListOfRecentGameReleases((currentState as GameLoaded).games.length, 20);
         yield games.isEmpty
@@ -102,11 +114,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
               );
       }
     } catch (_) {
+      print("Error while retrieveing games: " + _.toString());
       yield GameError();
     }
   }
 
-  Stream<GameState> _mapFilteredGames(GameEvent event) async* {
+  Stream<GameState> _mapFilteredGames() async* {
     try {
 
         if (currentState is GameLoaded) {
@@ -115,7 +128,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           yield GameFiltered(games: games, hasReachedMax: false);
           return;
         }
-        if (currentState is GameFiltered || (currentState as GameLoaded).games.length == 0) {
+        if (currentState is GameFiltered) {
           final games =
               await giantBombRepository.getListOfRecentGameReleasesFiltered((currentState as GameFiltered).games.length, 20);
           yield games.isEmpty
@@ -126,7 +139,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
                 );
         }
       } catch (_) {
-        yield GameError();
+      print("Error while filtering games: " + _.toString());
+      yield GameError();
       }
   }
 
