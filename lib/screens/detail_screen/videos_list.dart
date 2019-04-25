@@ -1,29 +1,27 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:video_game_releases/models/game.dart';
-import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
+import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
-class SimilarGamesList  extends StatelessWidget {
+class VideosList extends StatelessWidget {
   
   final Color mainColor = Colors.black38;
-  final List<Game> similarGames;
+  final List<Videos> gameVideos;
 
-  SimilarGamesList({this.similarGames});
+  const VideosList({this.gameVideos});
 
   @override
   Widget build(BuildContext context) {
-    return buildSimilarGamesList();
+    return buildGameVideosList();
   }
 
-  Widget buildSimilarGamesList() {
+  Widget buildGameVideosList() {
 
-    if (similarGames == null || similarGames.isEmpty) {
+    if (gameVideos == null || gameVideos.isEmpty) {
       return Container(
-        child: Text(Constants.NO_SIMILAR_GAMES_FOUND),
+        child: Text(Constants.NO_VIDEOS_FOUND),
       );
-    } else if (similarGames == null || similarGames.isEmpty){
+    } else if (gameVideos == null || gameVideos.isEmpty){
       return new CircularProgressIndicator();
     }
 
@@ -34,19 +32,19 @@ class SimilarGamesList  extends StatelessWidget {
         new Expanded(
           child: new Container(
             height: 250,
-            child: buildSimilarGamesListView(),
+            child: buildGameVideosListView(),
           ),
         ),
       ],
     );
   }
 
-  Widget buildSimilarGamesListView() {
+  Widget buildGameVideosListView() {
     return ListView.builder(
-        key: PageStorageKey(this.similarGames[0].name),//Required to get passed type bool is not subtype of double error.(scroll position error)
+        key: PageStorageKey(this.gameVideos[0].name),//Required to get passed type bool is not subtype of double error.(scroll position error)
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: similarGames == null ? 0 : similarGames.length,
+        itemCount: gameVideos == null ? 0 : gameVideos.length,
         itemBuilder: (context, i) {
           return new Column(
             children: <Widget>[
@@ -58,20 +56,20 @@ class SimilarGamesList  extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameDetailScreen(
-                          similarGames[i], i.toString()),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => GameDetailScreen(
+                  //         gameVideos[i], i.toString()),
+                  //   ),
+                  // );
                 },
                 color: Colors.white,
               ),
               new Container(
                 width: 100,
                 child: new AutoSizeText(
-                  similarGames[i].name,
+                  gameVideos[i].name,
                   maxLines: 3,
                   maxFontSize: 16,
                   softWrap: true,
@@ -90,8 +88,8 @@ class SimilarGamesList  extends StatelessWidget {
     return new Container(
       margin: const EdgeInsets.only(left: 2.0, right: 2.0),
       child: new Container(
-        width: 100.0,
-        height: 155.0,
+        width: 320.0,
+        height: 180.0,
       ),
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(1.0),
@@ -107,7 +105,7 @@ class SimilarGamesList  extends StatelessWidget {
 
   DecorationImage retrieveGamePoster(int index) {
 
-    String gamePoster = similarGames[index].image.originalUrl;
+    String gamePoster = gameVideos[index].image.smallUrl;
     
     if (gamePoster != null && gamePoster.isNotEmpty) {
       return new DecorationImage(
@@ -117,5 +115,4 @@ class SimilarGamesList  extends StatelessWidget {
       return null;
     }
   }
-  
 }

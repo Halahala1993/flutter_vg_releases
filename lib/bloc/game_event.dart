@@ -45,3 +45,13 @@ class FetchSimilarGames extends GameEvent {
   @override
   String toString() => 'FetchSimilarGames';
 }
+
+class FetchVideos extends GameEvent {
+  final String videoIds;
+
+  FetchVideos(this.videoIds);
+
+
+  @override
+  String toString() => 'FetchVideos';
+}

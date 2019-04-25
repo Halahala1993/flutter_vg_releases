@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/models/videos.dart';
 
 
 abstract class GameState extends Equatable {
@@ -119,4 +120,29 @@ class SimilarGames extends GameState {
   @override
   String toString() =>
       'SimilarGames { games: ${games.length} }';
+}
+
+class GameVideos extends GameState {
+  final List<Videos> videos;
+
+  GameVideos({
+    this.videos
+  }) : super([videos]);
+
+  factory GameVideos.initial() {
+    return GameVideos(videos: null);
+  }
+
+  GameVideos copyWith({
+    List<Videos> videos,
+    bool hasReachedMax,
+  }) {
+    return GameVideos(
+      videos: videos ?? this.videos
+    );
+  }
+
+  @override
+  String toString() =>
+      'GameVideos { videos: ${videos.length} }';
 }

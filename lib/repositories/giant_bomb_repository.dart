@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/repositories/giant_bomb_api_client.dart';
 
 class GiantBombRepository {
@@ -22,6 +23,10 @@ class GiantBombRepository {
 
   Future<List<Game>> retrieveSimilarGamesWithIds(String gameIds) async {
     return await giantBombApiClient.retrieveSimilarGamesWithIds(gameIds);
+  }
+
+  Future<List<Videos>> retrieveGameVideosWithIds(String videoIds) async {
+    return await giantBombApiClient.retrieveGameVideosWithIds(videoIds);
   }
 
 }

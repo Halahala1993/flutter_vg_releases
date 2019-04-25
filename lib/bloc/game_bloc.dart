@@ -32,6 +32,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       yield* _mapFilteredGames();
     } else if (event is FetchSimilarGames) {
       yield* _mapSimilarGameList(event);
+    } else if (event is FetchVideos) {
+      yield* _mapGameVideosList(event);
     }
   }
 
@@ -43,6 +45,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       return;
 
     } catch (_) {
+      print("Error retrieiving similar games: " + _.toString());
+
+      yield GameError();
+    }
+  }
+
+  Stream<GameState> _mapGameVideosList(FetchVideos videoEvent) async* {
+    try {
+
+      final videos = await giantBombRepository.retrieveGameVideosWithIds(videoEvent.videoIds);
+      yield GameVideos(videos: videos);
+      return;
+
+    } catch (_) {
+      print("Error retrieiving game videos: " + _.toString());
       yield GameError();
     }
   }

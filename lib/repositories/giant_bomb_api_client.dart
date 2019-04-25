@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/giant_bomb_response.dart';
 import 'package:video_game_releases/models/releases.dart';
+import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/date_util.dart';
@@ -95,6 +96,28 @@ class GiantBombApiClient {
 
     } else {
       throw Exception("Error while retrieving game with ids: $gameIds");
+    }
+
+  }
+
+  Future<List<Videos>> retrieveGameVideosWithIds(String videoIds) async {
+
+    final response = await dio.get("videos/?format=json&filter=id:$videoIds&api_key=$apiKey");
+
+    if (response.statusCode == 200) {
+
+      final data = response.data;
+      List<Videos> videos = new List<Videos>.from(data["results"].map((x) => Videos.fromJson(x)));
+     // GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
+
+      //videos = giantBombResponse.results;
+      print("Similar videos returned: " + videos.length.toString());
+
+
+      return videos;
+
+    } else {
+      throw Exception("Error while retrieving game with ids: $videoIds");
     }
 
   }

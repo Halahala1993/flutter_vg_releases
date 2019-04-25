@@ -10,7 +10,9 @@ import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/enums.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/screens/detail_screen/similar_games.dart';
+import 'package:video_game_releases/screens/detail_screen/videos_list.dart';
 import 'package:video_game_releases/screens/homepage.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/date_util.dart';
@@ -35,6 +37,7 @@ class GameDetailState extends State<GameDetailScreen> {
   bool requesting = false;
   Game game;
   List<Game> similarGames;
+  List<Videos> gameVideos;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GameBloc _gameBloc = GameBloc();
 
@@ -65,6 +68,8 @@ class GameDetailState extends State<GameDetailScreen> {
 
               setupSimilarGames(this.game);
 
+              setupVideos(this.game);
+
               gameDetailRetrieved = true;
             }
           }
@@ -82,6 +87,10 @@ class GameDetailState extends State<GameDetailScreen> {
 
           if (state is SimilarGames) {
             this.similarGames = state.games;
+          }
+
+          if (state is GameVideos) {
+            this.gameVideos = state.videos;
           }
 
           return NestedScrollView(
@@ -367,10 +376,7 @@ class GameDetailState extends State<GameDetailScreen> {
     switch(category) {
       case Categories.VIDEOS :
         //print("");
-        return Container(
-          height: 200,
-          width: 200,
-        );
+        return gameDetailRetrieved ? VideosList(gameVideos: gameVideos) : Container();
         break;
       case Categories.IMAGES :
         //print("");
@@ -407,6 +413,22 @@ class GameDetailState extends State<GameDetailScreen> {
     }
 
     return gameIds;
+  }
+
+  setupVideos(Game game) {
+    if (game.videos != null  && game.videos.length != 0) {
+      String videoIds = formatVideoIds(game.videos);
+      _gameBloc.dispatch(FetchVideos(videoIds));
+    }
+  }
+
+  String formatVideoIds(List<Videos> videos) {
+    String videosIds = "";
+    for (Videos video in videos) {
+      videosIds += "${video.id}|";
+    }
+
+    return videosIds;
   }
 
   @override
