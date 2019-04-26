@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -11,6 +12,7 @@ import 'package:video_game_releases/models/enums.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
+import 'package:video_game_releases/screens/detail_screen/images_list.dart';
 import 'package:video_game_releases/screens/detail_screen/similar_games.dart';
 import 'package:video_game_releases/screens/detail_screen/videos_list.dart';
 import 'package:video_game_releases/screens/homepage.dart';
@@ -240,7 +242,7 @@ class GameDetailState extends State<GameDetailScreen> {
           borderRadius: new BorderRadius.circular(1.0),
           color: Colors.grey,
           image: new DecorationImage(
-              image: new NetworkImage(gamePosterPath),
+              image: new CachedNetworkImageProvider(gamePosterPath),
               fit: BoxFit.cover),
           boxShadow: [
             new BoxShadow(
@@ -375,7 +377,7 @@ class GameDetailState extends State<GameDetailScreen> {
         break;
       case Categories.IMAGES :
         //TODO add widget
-        return this.clickedTiles.contains(category) ? Container() : Container();
+        return this.clickedTiles.contains(category) ? ImagesList(gameImages: this.game.images) : Container();
         break;
       case Categories.SIMILAR_GAMES :
         //TODO: Test tile with different sized phones.

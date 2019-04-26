@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/models/image.dart';
 import 'package:video_game_releases/models/videos.dart';
 
 abstract class DetailGameState extends Equatable {

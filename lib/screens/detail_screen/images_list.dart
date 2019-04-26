@@ -1,61 +1,27 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_game_releases/bloc/bloc.dart';
-import 'package:video_game_releases/models/game.dart';
-import 'package:video_game_releases/models/videos.dart';
+import 'package:video_game_releases/models/image.dart';
 import 'package:video_game_releases/utils/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-class VideosList extends StatelessWidget {
-  
+class ImagesList extends StatelessWidget {
+
   final Color mainColor = Colors.black38;
-  final DetailGameBloc _gameBloc = DetailGameBloc();
-  final Game game;
-  List<Videos> gameVideos;
-  bool videosAvailable = false;
+  final List<Images> gameImages;
 
-  VideosList({this.game}) {
-    if (game.videos != null && game.videos.isNotEmpty) {
-      print("Setting up Videos");
-      this.videosAvailable = true;
-      setupVideos(game);
-    }
-  }
+  ImagesList({this.gameImages});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: BlocBuilder(
-        bloc: _gameBloc,
-        builder: (BuildContext context, DetailGameState state){
-          if (!this.videosAvailable) {
-            return Container(
-              child: Text(Constants.NO_VIDEOS_FOUND),
-            );
-          }
-
-          if(state is GameVideos) {
-            this.gameVideos = state.videos;
-            return buildGameVideosList();
-          }
-
-          return new Container(
-            child: CircularProgressIndicator(),
-          );
-
-        },
-      ),
-    );
+    return buildGameImagesList();
   }
 
-  Widget buildGameVideosList() {
+  Widget buildGameImagesList() {
 
-    if (gameVideos == null || gameVideos.isEmpty) {
+    if (gameImages == null || gameImages.isEmpty) {
       return Container(
-        child: Text(Constants.NO_VIDEOS_FOUND),
+        child: Text(Constants.NO_IMAGES_FOUND),
       );
-    } else if (gameVideos == null || gameVideos.isEmpty){
+    } else if (gameImages == null || gameImages.isEmpty){
       return new CircularProgressIndicator();
     }
 
@@ -66,19 +32,19 @@ class VideosList extends StatelessWidget {
         new Expanded(
           child: new Container(
             height: 250,
-            child: buildGameVideosListView(),
+            child: buildGameImagesListView(),
           ),
         ),
       ],
     );
   }
 
-  Widget buildGameVideosListView() {
+  Widget buildGameImagesListView() {
     return ListView.builder(
-        key: PageStorageKey(this.gameVideos[0].name),//Required to get passed type bool is not subtype of double error.(scroll position error)
+        key: PageStorageKey("images"),//Required to get passed type bool is not subtype of double error.(scroll position error)
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: gameVideos == null ? 0 : gameVideos.length,
+        itemCount: gameImages == null ? 0 : gameImages.length,
         itemBuilder: (context, i) {
           return new Column(
             children: <Widget>[
@@ -94,16 +60,16 @@ class VideosList extends StatelessWidget {
                   //   context,
                   //   MaterialPageRoute(
                   //     builder: (context) => GameDetailScreen(
-                  //         gameVideos[i], i.toString()),
+                  //         gameImages[i], i.toString()),
                   //   ),
                   // );
                 },
                 color: Colors.white,
               ),
-              new Container(
+              /*new Container(
                 width: 100,
                 child: new AutoSizeText(
-                  gameVideos[i].name,
+                  gameImages[i].name,//TODO Tags?
                   maxLines: 3,
                   maxFontSize: 16,
                   softWrap: true,
@@ -112,7 +78,7 @@ class VideosList extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
+              )*/
             ],
           );
         });
@@ -123,8 +89,9 @@ class VideosList extends StatelessWidget {
       children: <Widget>[
 
         new Container(
-          width: 320.0,
-          height: 180.0,
+          margin: const EdgeInsets.only(left: 2.0, right: 2.0),
+          width: 240.0,
+          height: 135.0,
           decoration: BoxDecoration(
             borderRadius: new BorderRadius.circular(1.0),
             color: Colors.grey,
@@ -141,11 +108,12 @@ class VideosList extends StatelessWidget {
 
   FadeInImage retrieveGamePoster(int index) {
 
-    String gamePoster = gameVideos[index].image.smallUrl;
-    
+    String gamePoster = gameImages[index].mediumUrl;
+
     if (gamePoster != null && gamePoster.isNotEmpty) {
       return FadeInImage.assetNetwork(
-        fit: BoxFit.cover,
+          fit: BoxFit.cover,
+          placeholderScale: 0.4,
           placeholder: 'assets/image_loading.gif',
           image: gamePoster
       );
@@ -154,19 +122,4 @@ class VideosList extends StatelessWidget {
     }
   }
 
-  setupVideos(Game game) {
-    if (game.videos != null  && game.videos.length != 0) {
-      String videoIds = formatVideoIds(game.videos);
-      _gameBloc.dispatch(FetchVideos(videoIds));
-    }
-  }
-
-  String formatVideoIds(List<Videos> videos) {
-    String videosIds = "";
-    for (Videos video in videos) {
-      videosIds += "${video.id}|";
-    }
-
-    return videosIds;
-  }
 }

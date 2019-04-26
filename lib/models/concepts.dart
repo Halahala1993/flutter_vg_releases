@@ -13,7 +13,7 @@ class Concepts {
   FirstAppearedIn firstAppearedInGame;
   String guid;
   int id;
-  Image image;
+  Images image;
   List<ImageTag> imageTags;
   String name;
   String siteDetailUrl;
@@ -46,7 +46,7 @@ class Concepts {
     firstAppearedInGame: json["first_appeared_in_game"] == null ? null : FirstAppearedIn.fromJson(json["first_appeared_in_game"]),
     guid: json["guid"] == null ? null : json["guid"],
     id: json["id"] == null ? null : json["id"],
-    image: json["image"] == null ? null : Image.fromJson(json["image"]),
+    image: json["image"] == null ? null : Images.fromJson(json["image"]),
     imageTags: json["image_tags"] == null ? null : new List<ImageTag>.from(json["image_tags"].map((x) => ImageTag.fromJson(x))),
     name: json["name"] == null ? null : json["name"],
     siteDetailUrl: json["site_detail_url"] == null ? null : json["site_detail_url"],

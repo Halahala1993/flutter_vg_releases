@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
@@ -113,21 +114,10 @@ class GameWidget extends StatelessWidget {
         child: new Container(
           width: 96.0,
           height: 120.0,
-        ),
-        decoration: new BoxDecoration(
-          borderRadius: new BorderRadius.circular(1.0),
-          color: Colors.grey,
-          image: new DecorationImage(
-              image: new NetworkImage(
-                  gameThumbUrl
-              ),
-              fit: BoxFit.cover),
-          boxShadow: [
-            new BoxShadow(
-                color: mainColor,
-                blurRadius: 1.0,
-                offset: new Offset(2.0, 5.0))
-          ],
+          child: FadeInImage.assetNetwork(
+              placeholder: 'assets/image_loading.gif',
+              image: gameThumbUrl
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:video_game_releases/models/enums.dart';
 
-class Image {
+class Images {
     String iconUrl;
     String mediumUrl;
     String screenUrl;
@@ -12,7 +12,7 @@ class Image {
     String originalUrl;
     ImageTags imageTags;
 
-    Image({
+    Images({
         this.iconUrl,
         this.mediumUrl,
         this.screenUrl,
@@ -25,7 +25,7 @@ class Image {
         this.imageTags,
     });
 
-    factory Image.fromJson(Map<String, dynamic> json) => new Image(
+    factory Images.fromJson(Map<String, dynamic> json) => new Images(
         iconUrl: json["icon_url"],
         mediumUrl: json["medium_url"],
         screenUrl: json["screen_url"],

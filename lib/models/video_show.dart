@@ -6,7 +6,7 @@ class VideoShow {
   String title;
   int position;
   String siteDetailUrl;
-  Image image;
+  Images image;
 
   VideoShow({
     this.apiDetailUrl,
@@ -23,7 +23,7 @@ class VideoShow {
     title: json["title"],
     position: json["position"],
     siteDetailUrl: json["site_detail_url"],
-    image: Image.fromJson(json["image"]),
+    image: Images.fromJson(json["image"]),
   );
 
   Map<String, dynamic> toJson() => {

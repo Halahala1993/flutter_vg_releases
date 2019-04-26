@@ -14,7 +14,7 @@ class Character {
   int gender;
   String guid;
   int id;
-  Image image;
+  Images image;
   List<ImageTag> imageTags;
   dynamic lastName;
   String name;
@@ -53,7 +53,7 @@ class Character {
     gender: json["gender"] == null ? null : json["gender"],
     guid: json["guid"] == null ? null : json["guid"],
     id: json["id"] == null ? null : json["id"],
-    image: json["image"] == null ? null : Image.fromJson(json["image"]),
+    image: json["image"] == null ? null : Images.fromJson(json["image"]),
     imageTags: json["image_tags"] == null ? null :  new List<ImageTag>.from(json["image_tags"].map((x) => ImageTag.fromJson(x))),
     lastName: json["last_name"] == null ? null :  json["last_name"],
     name: json["name"] == null ? null :  json["name"],

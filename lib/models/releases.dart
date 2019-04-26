@@ -17,7 +17,7 @@ class Releases {
     dynamic gameRating;
     String guid;
     int id;
-    Image image;
+    Images image;
     int maximumPlayers;
     int minimumPlayers;
     String name;
@@ -70,7 +70,7 @@ class Releases {
         gameRating: json["game_rating"],
         guid: json["guid"],
         id: json["id"],
-        image: Image.fromJson(json["image"]),
+        image: Images.fromJson(json["image"]),
         maximumPlayers: json["maximum_players"],
         minimumPlayers: json["minimum_players"],
         name: json["name"],

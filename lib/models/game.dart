@@ -23,7 +23,7 @@ class Game {
     dynamic expectedReleaseYear;
     String guid;
     int id;
-    Image image;
+    Images image;
     List<ImageTag> imageTags;
     String name;
     int numberOfUserReviews;
@@ -31,7 +31,7 @@ class Game {
     String originalReleaseDate;
     List<Platform> platforms;
     String siteDetailUrl;
-    List<Image> images;
+    List<Images> images;
     List<Videos> videos;
     List<Character> characters;
     List<Concepts> concepts;
@@ -108,7 +108,7 @@ class Game {
         expectedReleaseYear: json["expected_release_year"] == null ? null : json["expected_release_year"],
         guid: json["guid"] == null ? null : json["guid"],
         id: json["id"] == null ? null : json["id"],
-        image: json["image"] == null ? null : Image.fromJson(json["image"]),
+        image: json["image"] == null ? null : Images.fromJson(json["image"]),
         imageTags:  json["image_tags"] == null ? null : new List<ImageTag>.from(json["image_tags"].map((x) => ImageTag.fromJson(x))),
         name: json["name"]  == null ? null : json["name"],
         numberOfUserReviews: json["number_of_user_reviews"]  == null ? null : json["number_of_user_reviews"],
@@ -116,7 +116,7 @@ class Game {
         originalReleaseDate: json["original_release_date"] == null ? null : json["original_release_date"],
         platforms: json["platforms"] == null ? null : new List<Platform>.from(json["platforms"].map((x) => Platform.fromJson(x))),
         siteDetailUrl: json["site_detail_url"] == null ? null : json["site_detail_url"],
-        images: json["images"] == null ? null : new List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+        images: json["images"] == null ? null : new List<Images>.from(json["images"].map((x) => Images.fromJson(x))),
         videos: json["videos"] == null ? null : new List<Videos>.from(json["videos"].map((x) => Videos.fromJson(x))),
         characters: json["characters"] == null ? null : new List<Character>.from(json["characters"].map((x) => Character.fromJson(x))),
         concepts: json["concepts"] == null ? null : new List<Concepts>.from(json["concepts"].map((x) => Concepts.fromJson(x))),

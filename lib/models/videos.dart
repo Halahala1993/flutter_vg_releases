@@ -17,7 +17,7 @@ class Videos {
   DateTime publishDate;
   String siteDetailUrl;
   String url;
-  Image image;
+  Images image;
   String user;
   VideoType videoType;
   VideoShow videoShow;
@@ -64,7 +64,7 @@ class Videos {
     publishDate: json["publish_date"] == null ? null : DateTime.parse(json["publish_date"]),
     siteDetailUrl: json["site_detail_url"] == null ? null : json["site_detail_url"],
     url: json["url"] == null ? null : json["url"],
-    image: json["image"] == null ? null : Image.fromJson(json["image"]),
+    image: json["image"] == null ? null : Images.fromJson(json["image"]),
     user: json["user"] == null ? null : json["user"],
     videoType: json["video_type"] == null ? null : videoTypeValues.map[json["video_type"]],
     videoShow: json["video_show"] == null ? null : VideoShow.fromJson(json["video_show"]),

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,34 +112,40 @@ class SimilarGamesList  extends StatelessWidget {
         });
   }
 
-  Container buildSimilarGamePoster(int index) {
+  Stack buildSimilarGamePoster(int index) {
+    return new Stack(
+      children: <Widget>[
 
-    return new Container(
-      margin: const EdgeInsets.only(left: 2.0, right: 2.0),
-      child: new Container(
-        width: 100.0,
-        height: 155.0,
-      ),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.circular(1.0),
-        color: Colors.grey,
-        image: retrieveGamePoster(index),
-        boxShadow: [
-          new BoxShadow(
-              color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
-        ],
-      ),
+        new Container(
+          margin: const EdgeInsets.only(left: 2.0, right: 2.0),
+          width: 100.0,
+          height: 155.0,
+          decoration: BoxDecoration(
+            borderRadius: new BorderRadius.circular(1.0),
+            color: Colors.grey,
+            boxShadow: [
+              new BoxShadow(
+                  color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
+            ],
+          ),
+          child: retrieveGamePoster(index),
+        )
+      ],
     );
   }
 
-  DecorationImage retrieveGamePoster(int index) {
+  FadeInImage retrieveGamePoster(int index) {
 
     String gamePoster = similarGames[index].image.originalUrl;
-    
+
     if (gamePoster != null && gamePoster.isNotEmpty) {
-      return new DecorationImage(
-          image: new NetworkImage(gamePoster),
-          fit: BoxFit.cover);
+      return FadeInImage.assetNetwork(
+          fit: BoxFit.fitHeight,
+          placeholderScale: .3,
+          imageScale: 1.0,
+          placeholder: 'assets/image_loading.gif',
+          image: gamePoster
+      );
     } else {
       return null;
     }
