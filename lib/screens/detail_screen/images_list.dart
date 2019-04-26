@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:video_game_releases/models/image.dart';
 import 'package:video_game_releases/utils/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:video_game_releases/utils/widget_utils/image_zoom_util.dart';
 
 class ImagesList extends StatefulWidget {
 
@@ -70,13 +72,15 @@ class _ImagesListState extends State<ImagesList> {
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => GameDetailScreen(
-                  //         gameImages[i], i.toString()),
-                  //   ),
-                  // );
+
+                  String gamePoster = this.gameImages[i].mediumUrl;
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageZoom(url: gamePoster)
+                    ),
+                  );
                 },
                 color: Colors.white,
               ),
@@ -99,10 +103,18 @@ class _ImagesListState extends State<ImagesList> {
   }
 
   Stack buildSimilarGamePoster(int index) {
+
+    String gamePoster = this.gameImages[index].mediumUrl;
+
+    var rand = Random();
+    int randomNumber = rand.nextInt(200);
+
     return new Stack(
       children: <Widget>[
 
-        new Container(
+        Hero(
+          tag: gamePoster != null ? "$gamePoster" : "image_$randomNumber",
+          child: Container(
           margin: const EdgeInsets.only(left: 2.0, right: 2.0),
           width: 240.0,
           height: 135.0,
@@ -115,6 +127,7 @@ class _ImagesListState extends State<ImagesList> {
             ],
           ),
           child: retrieveGamePoster(index),
+        ),
         )
       ],
     );

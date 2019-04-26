@@ -19,6 +19,7 @@ import 'package:video_game_releases/screens/homepage.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/date_util.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:video_game_releases/utils/widget_utils/image_zoom_util.dart';
 
 class GameDetailScreen extends StatefulWidget {
   String heroId;
@@ -101,7 +102,17 @@ class GameDetailState extends State<GameDetailScreen> {
                             margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                             child: new Column(
                               children: [
-                                buildGamePoster()
+                                FlatButton(
+                                  child: buildGamePoster(),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ImageZoom(url: gamePosterPath)
+                                      ),
+                                    );
+                                  },
+                                )
                               ],
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),
@@ -231,7 +242,7 @@ class GameDetailState extends State<GameDetailScreen> {
 
   Widget buildGamePoster() {
     return Hero(
-      tag: "game_poster" + (widget.heroId),
+      tag: "$gamePosterPath",
       child: new Container(
         margin: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
         child: new Container(

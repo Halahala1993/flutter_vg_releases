@@ -105,10 +105,10 @@ class GameWidget extends StatelessWidget {
   }
 
   Widget buildGameIcon() {
-    String gameThumbUrl = game.image.screenLargeUrl;
+    String gameThumbUrl = game.image.originalUrl;
     return Hero(
       transitionOnUserGestures: true,
-      tag: "game_poster" + (game.id.toString()),
+      tag: "$gameThumbUrl",
       child: new Container(
         margin: const EdgeInsets.fromLTRB(0, 2, 1, 2),
         child: new Container(
