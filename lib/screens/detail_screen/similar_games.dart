@@ -8,20 +8,39 @@ import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
-class SimilarGamesList  extends StatelessWidget {
+class SimilarGamesList  extends StatefulWidget {
   
+  final Game game;
+
+  const SimilarGamesList({this.game});
+
+  @override
+  _SimilarGamesListState createState() => _SimilarGamesListState();
+}
+
+class _SimilarGamesListState extends State<SimilarGamesList> {
+
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
+
   List<Game> similarGames;
-  final Game game;
+  Game game;
   bool similarGamesAvailable = false;
 
-  SimilarGamesList({this.game}) {
+
+  @override
+  void initState() {
+    super.initState();
+
+    this.game = widget.game;
+
     if (game.similarGames != null && game.similarGames.isNotEmpty) {
       this.similarGamesAvailable = true;
       setupSimilarGames(game);
-    }
+    
+  }
+
   }
 
   @override
@@ -166,5 +185,4 @@ class SimilarGamesList  extends StatelessWidget {
 
     return gameIds;
   }
-  
 }

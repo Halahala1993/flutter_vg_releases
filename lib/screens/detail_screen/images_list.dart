@@ -3,12 +3,26 @@ import 'package:video_game_releases/models/image.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class ImagesList extends StatelessWidget {
+class ImagesList extends StatefulWidget {
 
-  final Color mainColor = Colors.black38;
   final List<Images> gameImages;
 
   ImagesList({this.gameImages});
+
+  @override
+  _ImagesListState createState() => _ImagesListState();
+}
+
+class _ImagesListState extends State<ImagesList> {
+
+  final Color mainColor = Colors.black38;
+  List<Images> gameImages;
+
+  @override
+  void initState() { 
+    super.initState();
+    this.gameImages = widget.gameImages;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +31,11 @@ class ImagesList extends StatelessWidget {
 
   Widget buildGameImagesList() {
 
-    if (gameImages == null || gameImages.isEmpty) {
+    if (this.gameImages == null || this.gameImages.isEmpty) {
       return Container(
         child: Text(Constants.NO_IMAGES_FOUND),
       );
-    } else if (gameImages == null || gameImages.isEmpty){
+    } else if (this.gameImages == null || this.gameImages.isEmpty){
       return new CircularProgressIndicator();
     }
 
@@ -44,7 +58,7 @@ class ImagesList extends StatelessWidget {
         key: PageStorageKey("images"),//Required to get passed type bool is not subtype of double error.(scroll position error)
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: gameImages == null ? 0 : gameImages.length,
+        itemCount: this.gameImages == null ? 0 : this.gameImages.length,
         itemBuilder: (context, i) {
           return new Column(
             children: <Widget>[
@@ -108,7 +122,7 @@ class ImagesList extends StatelessWidget {
 
   FadeInImage retrieveGamePoster(int index) {
 
-    String gamePoster = gameImages[index].mediumUrl;
+    String gamePoster = this.gameImages[index].mediumUrl;
 
     if (gamePoster != null && gamePoster.isNotEmpty) {
       return FadeInImage.assetNetwork(
@@ -121,5 +135,4 @@ class ImagesList extends StatelessWidget {
       return null;
     }
   }
-
 }

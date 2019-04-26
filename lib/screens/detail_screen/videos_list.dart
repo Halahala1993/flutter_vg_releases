@@ -7,15 +7,28 @@ import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
-class VideosList extends StatelessWidget {
+class VideosList extends StatefulWidget {
   
+  final Game game;
+
+  VideosList({this.game});
+
+  @override
+  _VideosListState createState() => _VideosListState();
+}
+
+class _VideosListState extends State<VideosList> {
+
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
-  final Game game;
   List<Videos> gameVideos;
+  Game game;
   bool videosAvailable = false;
 
-  VideosList({this.game}) {
+  @override
+  void initState() { 
+    super.initState();
+    this.game = widget.game;
     if (game.videos != null && game.videos.isNotEmpty) {
       print("Setting up Videos");
       this.videosAvailable = true;
