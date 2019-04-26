@@ -1,18 +1,51 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_game_releases/bloc/bloc.dart';
+import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
 class VideosList extends StatelessWidget {
   
   final Color mainColor = Colors.black38;
-  final List<Videos> gameVideos;
+  final DetailGameBloc _gameBloc = DetailGameBloc();
+  final Game game;
+  List<Videos> gameVideos;
+  bool videosAvailable = false;
 
-  const VideosList({this.gameVideos});
+  VideosList({this.game}) {
+    if (game.videos != null && game.videos.isNotEmpty) {
+      print("Setting up Videos");
+      this.videosAvailable = true;
+      setupVideos(game);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return buildGameVideosList();
+    return Container(
+      child: BlocBuilder(
+        bloc: _gameBloc,
+        builder: (BuildContext context, DetailGameState state){
+          if (!this.videosAvailable) {
+            return Container(
+              child: Text(Constants.NO_VIDEOS_FOUND),
+            );
+          }
+
+          if(state is GameVideos) {
+            this.gameVideos = state.videos;
+            return buildGameVideosList();
+          }
+
+          return new Container(
+            child: CircularProgressIndicator(),
+          );
+
+        },
+      ),
+    );
   }
 
   Widget buildGameVideosList() {
@@ -114,5 +147,21 @@ class VideosList extends StatelessWidget {
     } else {
       return null;
     }
+  }
+
+  setupVideos(Game game) {
+    if (game.videos != null  && game.videos.length != 0) {
+      String videoIds = formatVideoIds(game.videos);
+      _gameBloc.dispatch(FetchVideos(videoIds));
+    }
+  }
+
+  String formatVideoIds(List<Videos> videos) {
+    String videosIds = "";
+    for (Videos video in videos) {
+      videosIds += "${video.id}|";
+    }
+
+    return videosIds;
   }
 }

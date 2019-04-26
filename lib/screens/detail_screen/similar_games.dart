@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
 import 'package:video_game_releases/utils/constants.dart';
@@ -8,24 +10,46 @@ import 'package:video_game_releases/utils/constants.dart';
 class SimilarGamesList  extends StatelessWidget {
   
   final Color mainColor = Colors.black38;
-  final List<Game> similarGames;
+  final DetailGameBloc _gameBloc = DetailGameBloc();
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<Game> similarGames;
+  final Game game;
+  bool similarGamesAvailable = false;
 
-  SimilarGamesList({this.similarGames});
+  SimilarGamesList({this.game}) {
+    if (game.similarGames != null && game.similarGames.isNotEmpty) {
+      this.similarGamesAvailable = true;
+      setupSimilarGames(game);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return buildSimilarGamesList();
+    return Container(
+      child: BlocBuilder(
+        bloc: _gameBloc,
+        builder: (BuildContext context, DetailGameState state){
+
+          if (!this.similarGamesAvailable) {
+            return Container(
+              child: Text(Constants.NO_SIMILAR_GAMES_FOUND),
+            );
+          }
+
+          if (state is SimilarGames) {
+            this.similarGames = state.games;
+            return buildSimilarGamesList();
+          }
+
+          return new Container(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+    );
   }
 
-  Widget buildSimilarGamesList() {
-
-    if (similarGames == null || similarGames.isEmpty) {
-      return Container(
-        child: Text(Constants.NO_SIMILAR_GAMES_FOUND),
-      );
-    } else if (similarGames == null || similarGames.isEmpty){
-      return new CircularProgressIndicator();
-    }
+  Row buildSimilarGamesList() {
 
     return new Row(
       mainAxisSize: MainAxisSize.max,
@@ -41,7 +65,8 @@ class SimilarGamesList  extends StatelessWidget {
     );
   }
 
-  Widget buildSimilarGamesListView() {
+  ListView buildSimilarGamesListView() {
+
     return ListView.builder(
         key: PageStorageKey(this.similarGames[0].name),//Required to get passed type bool is not subtype of double error.(scroll position error)
         scrollDirection: Axis.horizontal,
@@ -87,6 +112,7 @@ class SimilarGamesList  extends StatelessWidget {
   }
 
   Container buildSimilarGamePoster(int index) {
+
     return new Container(
       margin: const EdgeInsets.only(left: 2.0, right: 2.0),
       child: new Container(
@@ -116,6 +142,22 @@ class SimilarGamesList  extends StatelessWidget {
     } else {
       return null;
     }
+  }
+
+  setupSimilarGames(Game game) {
+    if (game.similarGames != null) {
+      String gameIds = formatGameIds(game.similarGames);
+      _gameBloc.dispatch(FetchSimilarGames(gameIds));
+    }
+  }
+
+  String formatGameIds(List<Game> similarGames) {
+    String gameIds = "";
+    for (Game game in similarGames) {
+      gameIds += "${game.id}|";
+    }
+
+    return gameIds;
   }
   
 }

@@ -24,43 +24,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Stream<GameState> mapEventToState(GameEvent event) async* {
     if (event is Fetch && !_hasReachedMax(currentState)) {
       yield* _mapLoadGames();
-    } else if  (event is FetchGameDetail) {
-      yield* _mapGameDetail(event);
     } else if (event is RefreshGameFetch) {
       yield* _mapRefreshGameList();
     } else if (event is FetchFilteredList) {
       yield* _mapFilteredGames();
-    } else if (event is FetchSimilarGames) {
-      yield* _mapSimilarGameList(event);
-    } else if (event is FetchVideos) {
-      yield* _mapGameVideosList(event);
-    }
-  }
-
-  Stream<GameState> _mapSimilarGameList(FetchSimilarGames similarEvent) async* {
-    try {
-
-      final games = await giantBombRepository.retrieveSimilarGamesWithIds(similarEvent.gameIds);
-      yield SimilarGames(games: games);
-      return;
-
-    } catch (_) {
-      print("Error retrieiving similar games: " + _.toString());
-
-      yield GameError();
-    }
-  }
-
-  Stream<GameState> _mapGameVideosList(FetchVideos videoEvent) async* {
-    try {
-
-      final videos = await giantBombRepository.retrieveGameVideosWithIds(videoEvent.videoIds);
-      yield GameVideos(videos: videos);
-      return;
-
-    } catch (_) {
-      print("Error retrieiving game videos: " + _.toString());
-      yield GameError();
     }
   }
 
@@ -86,18 +53,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     } catch (_) {
       print("Error while refreshing game list: " + _.toString());
 
-      yield GameError();
-    }
-  }
-
-  Stream<GameState> _mapGameDetail(FetchGameDetail detailEvent) async* {
-
-    try {
-      final Game game = await giantBombRepository.retrieveGameDetailsByGameId(detailEvent.gameId);
-      yield GameDetail(game: game);
-      return;
-    } catch (_) {
-      print("Error while retrieving detail: " + _.toString());
       yield GameError();
     }
   }

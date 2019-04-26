@@ -34,19 +34,17 @@ class GameDetailScreen extends StatefulWidget {
 
 class GameDetailState extends State<GameDetailScreen> {
   final Color mainColor = Colors.black38;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final DetailGameBloc _gameBloc = DetailGameBloc();
+
   bool requesting = false;
   Game game;
-  List<Game> similarGames;
-  List<Videos> gameVideos;
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
-  final GameBloc _gameBloc = GameBloc();
-
   bool gameDetailRetrieved  = false;
-
   String gamePosterPath;
   String appBarImage;
+  List<Categories> clickedTiles = new List();
 
-  GameDetailState(@required Game game) {
+  GameDetailState(Game game) {
     this.game = game;
     this.gamePosterPath = this.game.image.originalUrl;
     this.appBarImage = this.game.image.mediumUrl;
@@ -60,16 +58,11 @@ class GameDetailState extends State<GameDetailScreen> {
       key: scaffoldKey,
       body: BlocBuilder(
         bloc: _gameBloc,
-        builder: (BuildContext context, GameState state){
+        builder: (BuildContext context, DetailGameState state){
 
           if (state is GameDetail) {
             if (state.game != null) {
               this.game = state.game;
-
-              setupSimilarGames(this.game);
-
-              setupVideos(this.game);
-
               gameDetailRetrieved = true;
             }
           }
@@ -83,14 +76,6 @@ class GameDetailState extends State<GameDetailScreen> {
                   backgroundColor: Colors.redAccent
               );
             }
-          }
-
-          if (state is SimilarGames) {
-            this.similarGames = state.games;
-          }
-
-          if (state is GameVideos) {
-            this.gameVideos = state.videos;
           }
 
           return NestedScrollView(
@@ -363,6 +348,7 @@ class GameDetailState extends State<GameDetailScreen> {
     return ExpansionTile(
         key: PageStorageKey<Categories>(category),
         title: Text(categoryValues[category].toString()),
+        onExpansionChanged: (bool expanded) => handleTileClickState(expanded, category),
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(top: 10, bottom: 5),
@@ -372,64 +358,36 @@ class GameDetailState extends State<GameDetailScreen> {
     );
   }
 
+  handleTileClickState(bool expanded, Categories category) {
+    print("$category clicked: $expanded");
+    if (expanded && !this.clickedTiles.contains(category)) {
+      setState(() { //So it doesn't keep reloading
+        this.clickedTiles.add(category);
+      });
+    }
+  }
+
   Widget determineSubsectionWidget(Categories category) {
     switch(category) {
       case Categories.VIDEOS :
-        //print("");
-        return gameDetailRetrieved ? VideosList(gameVideos: gameVideos) : Container();
+
+        return this.clickedTiles.contains(category) ? VideosList(game: this.game) : Container();
         break;
       case Categories.IMAGES :
-        //print("");
-        return Container(
-          height: 200,
-          width: 200,
-        );
+        //TODO add widget
+        return this.clickedTiles.contains(category) ? Container() : Container();
         break;
       case Categories.SIMILAR_GAMES :
         //TODO: Test tile with different sized phones.
-        return gameDetailRetrieved ? SimilarGamesList(similarGames: this.similarGames,) : Container();
+        return this.clickedTiles.contains(category) ? SimilarGamesList(game: this.game) : Container();
         break;
       case Categories.CHARACTERS :
-        //print("");
-        return Container(
-          height: 200,
-          width: 200,
-        );
+        //TODO add widget
+        return this.clickedTiles.contains(category) ? Container() : Container();
         break;
     }
   }
 
-  setupSimilarGames(Game game) {
-    if (game.similarGames != null) {
-      String gameIds = formatGameIds(game.similarGames);
-      _gameBloc.dispatch(FetchSimilarGames(gameIds));
-    }
-  }
-
-  String formatGameIds(List<Game> similarGames) {
-    String gameIds = "";
-    for (Game game in similarGames) {
-      gameIds += "${game.id}|";
-    }
-
-    return gameIds;
-  }
-
-  setupVideos(Game game) {
-    if (game.videos != null  && game.videos.length != 0) {
-      String videoIds = formatVideoIds(game.videos);
-      _gameBloc.dispatch(FetchVideos(videoIds));
-    }
-  }
-
-  String formatVideoIds(List<Videos> videos) {
-    String videosIds = "";
-    for (Videos video in videos) {
-      videosIds += "${video.id}|";
-    }
-
-    return videosIds;
-  }
 
   @override
   void dispose() {

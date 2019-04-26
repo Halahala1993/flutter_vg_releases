@@ -16,15 +16,7 @@ class FetchFilteredList extends GameEvent {
   String toString() => 'FetchFilteredList';
 }
 
-class FetchGameDetail extends GameEvent {
-  final int gameId;
 
-  FetchGameDetail(this.gameId);
-
-
-  @override
-  String toString() => 'FetchGameDetail';
-}
 
 class RefreshGameFetch extends GameEvent {
   final List<Game> games;
@@ -34,24 +26,4 @@ class RefreshGameFetch extends GameEvent {
 
   @override
   String toString() => 'RefreshGameFetch';
-}
-
-class FetchSimilarGames extends GameEvent {
-  final String gameIds;
-
-  FetchSimilarGames(this.gameIds);
-
-
-  @override
-  String toString() => 'FetchSimilarGames';
-}
-
-class FetchVideos extends GameEvent {
-  final String videoIds;
-
-  FetchVideos(this.videoIds);
-
-
-  @override
-  String toString() => 'FetchVideos';
 }
