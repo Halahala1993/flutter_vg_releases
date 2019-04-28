@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:video_game_releases/models/character.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/giant_bomb_response.dart';
 import 'package:video_game_releases/models/releases.dart';
@@ -108,16 +109,32 @@ class GiantBombApiClient {
 
       final data = response.data;
       List<Videos> videos = new List<Videos>.from(data["results"].map((x) => Videos.fromJson(x)));
-     // GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
 
-      //videos = giantBombResponse.results;
       print("Similar videos returned: " + videos.length.toString());
-
 
       return videos;
 
     } else {
       throw Exception("Error while retrieving game with ids: $videoIds");
+    }
+
+  }
+
+  Future<List<Character>> retrieveGameCharactersWithIds(String characterIds) async {
+
+    final response = await dio.get("characters/?format=json&filter=id:$characterIds&api_key=$apiKey");
+
+    if (response.statusCode == 200) {
+
+      final data = response.data;
+      List<Character> characters = new List<Character>.from(data["results"].map((x) => Character.fromJson(x)));
+
+      print("Characters returned: " + characters.length.toString());
+
+      return characters;
+
+    } else {
+      throw Exception("Error while retrieving game with ids: $characterIds");
     }
 
   }

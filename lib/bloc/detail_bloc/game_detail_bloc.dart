@@ -28,6 +28,8 @@ class DetailGameBloc extends Bloc<DetailGameEvent, DetailGameState> {
       yield* _mapSimilarGameList(event);
     } else if (event is FetchVideos) {
       yield* _mapGameVideosList(event);
+    } else if (event is FetchCharacters) {
+      yield* _mapGameCharactersList(event);
     }
   }
 
@@ -54,6 +56,18 @@ class DetailGameBloc extends Bloc<DetailGameEvent, DetailGameState> {
 
     } catch (_) {
       print("Error retrieiving game videos: " + _.toString());
+      yield DetailGameError();
+    }
+  }
+
+  Stream<DetailGameState> _mapGameCharactersList(FetchCharacters charactersEvent) async* {
+    try {
+      final characters = await giantBombRepository.retrieveGameCharactersWithIds(charactersEvent.characterIds);
+      yield GameCharacters(characters: characters);
+      return;
+
+    } catch (_) {
+      print("Error retrieiving game characters: " + _.toString());
       yield DetailGameError();
     }
   }

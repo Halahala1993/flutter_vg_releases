@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:video_game_releases/models/character.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/repositories/giant_bomb_api_client.dart';
@@ -32,6 +33,11 @@ class GiantBombRepository {
   Future<List<Videos>> retrieveGameVideosWithIds(String videoIds) async {
     print("Retrieving game videos");
     return await giantBombApiClient.retrieveGameVideosWithIds(videoIds);
+  }
+
+  Future<List<Character>> retrieveGameCharactersWithIds(String videoIds) async {
+    print("Retrieving game videos");
+    return await giantBombApiClient.retrieveGameCharactersWithIds(videoIds);
   }
 
 }

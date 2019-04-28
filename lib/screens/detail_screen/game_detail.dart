@@ -12,6 +12,7 @@ import 'package:video_game_releases/models/enums.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
+import 'package:video_game_releases/screens/detail_screen/characters_list.dart';
 import 'package:video_game_releases/screens/detail_screen/images_list.dart';
 import 'package:video_game_releases/screens/detail_screen/similar_games.dart';
 import 'package:video_game_releases/screens/detail_screen/videos_list.dart';
@@ -396,7 +397,7 @@ class GameDetailState extends State<GameDetailScreen> {
         break;
       case Categories.CHARACTERS :
         //TODO add widget
-        return this.clickedTiles.contains(category) ? Container() : Container();
+        return this.clickedTiles.contains(category) ? CharactersList(game: this.game) : Container();
         break;
     }
   }

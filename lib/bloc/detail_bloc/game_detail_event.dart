@@ -33,3 +33,13 @@ class FetchVideos extends DetailGameEvent {
   @override
   String toString() => 'FetchVideos';
 }
+
+class FetchCharacters extends DetailGameEvent {
+  final String characterIds;
+
+  FetchCharacters(this.characterIds);
+
+
+  @override
+  String toString() => 'FetchCharacters';
+}

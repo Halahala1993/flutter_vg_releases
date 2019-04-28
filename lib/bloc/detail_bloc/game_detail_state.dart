@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:video_game_releases/models/character.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/image.dart';
 import 'package:video_game_releases/models/videos.dart';
@@ -85,5 +86,30 @@ class GameVideos extends DetailGameState {
   @override
   String toString() =>
       'GameVideos { videos: ${videos.length} }';
+}
+
+class GameCharacters extends DetailGameState {
+  final List<Character> characters;
+
+  GameCharacters({
+    this.characters
+  }) : super([characters]);
+
+  factory GameCharacters.initial() {
+    return GameCharacters(characters: null);
+  }
+
+  GameCharacters copyWith({
+    List<Videos> videos,
+    bool hasReachedMax,
+  }) {
+    return GameCharacters(
+        characters: videos ?? this.characters
+    );
+  }
+
+  @override
+  String toString() =>
+      'GameCharacters { characters: ${characters.length} }';
 }
 
