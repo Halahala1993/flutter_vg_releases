@@ -17,4 +17,19 @@ class Constants {
 
   //Errors:
   static const String ERROR_RETRIEVE_DETAILS = "Error retrieving additional details";
+
+  //Status Codes
+  static const int STATUS_100 = 100;
+  static const int STATUS_101 = 101;
+  static const int STATUS_102 = 102;
+  static const int STATUS_103 = 103;
+  static const int STATUS_104 = 104;
+  static const int STATUS_105 = 105;
+
+  static const String STATUS_100_MESSAGE = "Invalid API Key";
+  static const String STATUS_101_MESSAGE = "Object Not Found";
+  static const String STATUS_102_MESSAGE = "Error in URL Format";
+  static const String STATUS_103_MESSAGE = "'jsonp' format requires a 'json_callback' argument";
+  static const String STATUS_104_MESSAGE = "Filter Error";
+  static const String STATUS_105_MESSAGE = "Subscriber only video is for subscribers only";
 }
