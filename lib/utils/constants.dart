@@ -2,6 +2,8 @@ class Constants {
   
   static const String GB_API_KEY = "{GB_API_KEY}";
 
+  //URLs
+  static const String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
 
   //Detail Screen Section Headers
@@ -17,6 +19,7 @@ class Constants {
 
   //Errors:
   static const String ERROR_RETRIEVE_DETAILS = "Error retrieving additional details";
+  static const String COULD_NOT_LOAD_LINK = "Error: could not load url";
 
   //Status Codes
   static const int STATUS_100 = 100;

@@ -6,6 +6,11 @@ import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/utils/constants.dart';
+//import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
+
+//import 'package:webview_flutter/webview_flutter.dart';
 
 class VideosList extends StatefulWidget {
   
@@ -102,14 +107,13 @@ class _VideosListState extends State<VideosList> {
                   child: buildSimilarGamePoster(i),
                 ),
                 padding: const EdgeInsets.all(0.0),
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => GameDetailScreen(
-                  //         gameVideos[i], i.toString()),
-                  //   ),
-                  // );
+                onPressed: () async {
+                  String youtubeId = this.gameVideos[i].youtubeId;
+                  String url = Constants.YOUTUBE_URL + youtubeId;
+
+//                  await launch(url);
+
+                  await WebLauncher.launchUrl(url);
                 },
                 color: Colors.white,
               ),
