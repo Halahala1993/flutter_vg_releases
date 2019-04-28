@@ -8,6 +8,7 @@ import 'package:video_game_releases/models/enums.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/bottomloader.dart';
 import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
+import 'package:video_game_releases/screens/filter_widget.dart';
 import 'package:video_game_releases/screens/game_widget.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
 import 'package:video_game_releases/utils/filters.dart';
@@ -21,10 +22,13 @@ class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
   final GameBloc _gameBloc = GameBloc();
   final _scrollThreshold = 200.0;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+
   BuildContext _context;
   String apiKey = "";
   bool filteredRequest = false;
   Completer<void> _refreshCompleter;
+
 
   List<Abbreviation> checkedConsoles = new List<Abbreviation>();
 
@@ -90,7 +94,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
+    this._context = context;
+
     return Scaffold(
+      key: scaffoldKey,
+      endDrawer: FilterWidget(gameBloc: _gameBloc,),
       appBar: AppBar(
         title: Text("Recent Releases"),
         actions: <Widget>[
@@ -124,9 +132,14 @@ class _HomePageState extends State<HomePage> {
   Widget buildAndDetermineGameListState(GameState state) {
 
     if (state is GameLoaded) {
+      filteredRequest = false;
+
       return buildGameList(state.games, state.hasReachedMax);
     } else if (state is GameFiltered) {
-     return  buildGameList(state.games, state.hasReachedMax);
+
+      filteredRequest = true;
+
+      return  buildGameList(state.games, state.hasReachedMax);
     } else {
       return Container();
     }
@@ -181,70 +194,8 @@ class _HomePageState extends State<HomePage> {
         color: new Color(0xff3C3261),
       ),
       onPressed: () {
-        showFilterDialog();
+        scaffoldKey.currentState.openEndDrawer();
     });
-  }
-
-  AlertDialog buildFilterAlertDialog(BuildContext context) {
-   return  AlertDialog(
-      title: new Text("Request Seasons"),
-      content: Container(
-        height: 300,
-        width: 300,
-        child: ListView.builder(
-          itemCount: abbreviationValues.map.keys.length,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index) {
-            return CheckboxListTile(
-              // key: PageStorageKey<Abbreviation>(),
-              title: new Text(Abbreviation.values[index].toString().replaceAll("Abbreviation.", "")),
-              onChanged: (bool value) {
-                print("Checked");
-                handleCheckState(value, Abbreviation.values[index]);
-                Navigator.of(context).pop();
-                showFilterDialog();
-              },
-              value: this.checkedConsoles.contains(Abbreviation.values[index])
-            );
-          },
-        ),
-      ),
-      actions: <Widget>[
-        FlatButton(
-        child: new Text("Ok"),
-        onPressed: () {
-          for (var item in this.checkedConsoles) {
-            int platformId = FilterIds.platformIds[item];
-            Filters.preparePlatformFilter(platformId);
-          }
-          //Filters.preparePlatformFilter(platformId);
-          filteredRequest = true;
-          retrieveGameList();
-          Navigator.of(context).pop();
-        },
-      ),
-      new FlatButton(
-        child: new Text("Clear"),
-        onPressed: () {
-          this.checkedConsoles.clear();
-          filteredRequest = false;
-          Filters.clear();
-          //Exit app since we need API to do anything
-          Navigator.of(context).pop();
-          retrieveGameList();
-        },
-      ),
-      ],
-   );
-  }
-
-  Future<Null> showFilterDialog() async {
-    return showDialog <Null> (
-        context: this.context,
-        builder: (BuildContext context) {
-          var alert = buildFilterAlertDialog(context);
-          return alert;
-        });
   }
 
   retrieveGameList() {
@@ -266,6 +217,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _gameBloc.dispose();
+    Filters.clear();
     super.dispose();
   }
 

@@ -1,11 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/utils/filters.dart';
 
 class DateUtil {
     
   static String retrieveDateFilter() {
-    var now = new DateTime.now();
-    var future = new DateTime(now.year + 10);
+    var now = Filters.fromDate != null ? Filters.fromDate : new DateTime.now();
+    var future = Filters.toDate != null ? Filters.toDate : new DateTime(now.year + 10);
     
     String nowFormatted = formatDate(now);
     String futureFormatted = formatDate(future);
@@ -52,6 +53,10 @@ class DateUtil {
   }
 
   static String formatDate (DateTime date) {
+
+    if (date == null) {
+      return "-";
+    }
 
     var formatter = new DateFormat('yyyy-MM-dd');
     return formatter.format(date);

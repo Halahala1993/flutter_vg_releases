@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -106,9 +108,13 @@ class GameWidget extends StatelessWidget {
 
   Widget buildGameIcon() {
     String gameThumbUrl = game.image.originalUrl;
+    var rand = Random();
+    int randomNumber = rand.nextInt(200);
+
+
     return Hero(
       transitionOnUserGestures: true,
-      tag: "$gameThumbUrl",
+      tag: gameThumbUrl != null ? "$gameThumbUrl" : "image_$randomNumber",
       child: new Container(
         margin: const EdgeInsets.fromLTRB(0, 2, 1, 2),
         child: new Container(

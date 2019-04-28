@@ -2,7 +2,9 @@ import 'package:video_game_releases/models/enums.dart';
 
 class Filters {
   static String platformFilter;
-  
+  static DateTime fromDate;
+  static DateTime toDate;
+
   static void preparePlatformFilter(int platformId) {
     if (platformFilter == null || platformFilter.isEmpty) {
       platformFilter = ",platforms:$platformId";
@@ -12,12 +14,23 @@ class Filters {
   }
 
   static String getFilters() {
-    return platformFilter;
+    String filters = "";
+    if (platformFilter != null) {
+      filters += platformFilter;
+    }
+    return filters;
   }
 
   static void clear() {
     platformFilter = null;
+    fromDate = null;
+    toDate = null;
   }
+
+  /*static String getCustomDateFilters() {
+    return
+  }*/
+
 }
 
   
