@@ -72,3 +72,31 @@ class GameFiltered extends GameState {
   String toString() =>
       'GameFiltered { games: ${games.length}, hasReachedMax: $hasReachedMax }';
 }
+
+class GameSearched extends GameState {
+  final List<Game> games;
+  final bool hasReachedMax;
+
+  GameSearched({
+    this.games,
+    this.hasReachedMax,
+  }) : super([games, hasReachedMax]);
+
+  factory GameSearched.initial() {
+    return GameSearched(games: null, hasReachedMax: false);
+  }
+
+  GameSearched copyWith({
+    List<Game> games,
+    bool hasReachedMax,
+  }) {
+    return GameSearched(
+      games: games ?? this.games,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
+
+  @override
+  String toString() =>
+      'GameSearched { games: ${games.length}, hasReachedMax: $hasReachedMax }';
+}

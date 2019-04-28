@@ -388,7 +388,6 @@ class GameDetailState extends State<GameDetailScreen> {
         return this.clickedTiles.contains(category) ? VideosList(game: this.game) : Container();
         break;
       case Categories.IMAGES :
-        //TODO add widget
         return this.clickedTiles.contains(category) ? ImagesList(gameImages: this.game.images) : Container();
         break;
       case Categories.SIMILAR_GAMES :
@@ -396,7 +395,6 @@ class GameDetailState extends State<GameDetailScreen> {
         return this.clickedTiles.contains(category) ? SimilarGamesList(game: this.game) : Container();
         break;
       case Categories.CHARACTERS :
-        //TODO add widget
         return this.clickedTiles.contains(category) ? CharactersList(game: this.game) : Container();
         break;
     }

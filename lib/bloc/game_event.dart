@@ -16,7 +16,14 @@ class FetchFilteredList extends GameEvent {
   String toString() => 'FetchFilteredList';
 }
 
+class FetchSearchResults extends GameEvent {
+  final String searchQuery;
 
+  FetchSearchResults({@required this.searchQuery});
+
+  @override
+  String toString() => 'FetchSearchResults';
+}
 
 class RefreshGameFetch extends GameEvent {
   final List<Game> games;

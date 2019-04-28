@@ -23,11 +23,24 @@ class _HomePageState extends State<HomePage> {
   final GameBloc _gameBloc = GameBloc();
   final _scrollThreshold = 200.0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final TextEditingController searchController = new TextEditingController();
+  Color mainColor = const Color(0xff3C3261);
 
-  BuildContext _context;
+  bool _isSearching = false;
   String apiKey = "";
   bool filteredRequest = false;
   Completer<void> _refreshCompleter;
+  String _searchQuery;
+
+  Icon searchIcon = new Icon(
+    Icons.search,
+    color: new Color(0xff3C3261),
+  );
+
+  Widget appBarTitle = new Text(
+    "Recent Releases",
+    style: new TextStyle(color: Color(0xff3C3261)),
+  );
 
 
   List<Abbreviation> checkedConsoles = new List<Abbreviation>();
@@ -94,15 +107,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    this._context = context;
-
     return Scaffold(
       key: scaffoldKey,
       endDrawer: FilterWidget(gameBloc: _gameBloc,),
       appBar: AppBar(
-        title: Text("Recent Releases"),
+        title: appBarTitle,
         actions: <Widget>[
-          buildSearchBar(),
+          buildFilterButton(),
+          buildSearchBar()
         ],
       ),
       body:  BlocBuilder(
@@ -140,6 +152,10 @@ class _HomePageState extends State<HomePage> {
       filteredRequest = true;
 
       return  buildGameList(state.games, state.hasReachedMax);
+    } else if (state is GameSearched) {
+      filteredRequest = false;
+
+      return buildGameList(state.games, state.hasReachedMax);
     } else {
       return Container();
     }
@@ -187,7 +203,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  IconButton buildSearchBar() {
+  IconButton buildFilterButton() {
     return new IconButton(
       icon: new Icon(
         Icons.filter_list,
@@ -198,8 +214,71 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  IconButton buildSearchBar() {
+    return new IconButton(icon: searchIcon,
+        onPressed: () {
+          setState(() {
+            if (searchIcon.icon == Icons.search) {
+              this.searchIcon = new Icon(
+                Icons.close,
+                color: mainColor,
+              );
+              this.appBarTitle = new TextField(
+                controller: searchController,
+                style: new TextStyle(
+                  color: mainColor,
+                ),
+                decoration: new InputDecoration(
+                    prefixIcon: new Icon(
+                        Icons.search,
+                        color: mainColor
+                    ),
+                    hintText: "Search...",
+                    hintStyle: new TextStyle(
+                        color: mainColor
+                    )
+                ),
+                onSubmitted: searchOperation,
+              );
+
+            } else {
+              handleSearchEnd();
+            }
+          });
+        }
+    );
+  }
+
+  void searchOperation(String query) {
+    setState(() {
+      _isSearching = true;
+      this._searchQuery = query;
+      retrieveGameList();
+    });
+  }
+
+  void handleSearchEnd() {
+    setState(() {
+      this.searchIcon = new Icon(
+        Icons.search,
+        color: mainColor,
+      );
+      this.appBarTitle = new Text(
+        "Recent Releases",
+        style: new TextStyle(color: mainColor),
+      );
+      _isSearching = false;
+      searchController.clear();
+      _searchQuery = null;
+      //moviePresenter.getPopularMovies();
+      retrieveGameList();
+    });
+  }
+
   retrieveGameList() {
-    if (filteredRequest) {
+    if (_isSearching) {
+      _gameBloc.dispatch(FetchSearchResults(searchQuery: this._searchQuery));
+    } else if (filteredRequest) {
       _gameBloc.dispatch(FetchFilteredList());
     } else {
       _gameBloc.dispatch(Fetch());

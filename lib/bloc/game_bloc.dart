@@ -28,6 +28,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       yield* _mapRefreshGameList();
     } else if (event is FetchFilteredList) {
       yield* _mapFilteredGames();
+    } else if (event is FetchSearchResults) {
+      yield* _mapSearchedGames(event);
     }
   }
 
@@ -114,6 +116,51 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       print("Error while filtering games: " + _.toString());
       yield GameError();
       }
+  }
+
+  Stream<GameState> _mapSearchedGames(FetchSearchResults searchEvent) async* {
+
+    String query = searchEvent.searchQuery;
+
+    try {
+
+      if (currentState is GameLoaded) {
+
+        (currentState as GameLoaded).games.clear();
+        final games = await giantBombRepository.getGamesSearchResults(0, 10, query);
+        yield GameSearched(games: games, hasReachedMax: false);
+        return;
+      }
+      if (currentState is GameFiltered) {
+
+        (currentState as GameFiltered).games.clear();
+        final games = await giantBombRepository.getGamesSearchResults(0, 10, query);
+        yield GameSearched(games: games, hasReachedMax: false);
+        return;
+      }
+
+      if (currentState is GameSearched) {
+
+        var tempGames;
+        if ((currentState as GameSearched).games != null && (currentState as GameSearched).games.isNotEmpty) {
+          tempGames = (currentState as GameSearched).games;
+        } else if ((currentState as GameFiltered).games != null && (currentState as GameFiltered).games.isNotEmpty) {
+          tempGames = (currentState as GameFiltered).games;
+        } else {
+          tempGames = (currentState as GameLoaded).games;
+        }
+
+        final games = await giantBombRepository.getGamesSearchResults(tempGames.length, 10, query);
+        yield games.isEmpty ? (currentState as GameSearched).copyWith(hasReachedMax: true)
+            : GameSearched(
+          games: (currentState as GameSearched).games + games,
+          hasReachedMax: false,
+        );
+      }
+    } catch (_) {
+      print("Error while filtering games: " + _.toString());
+      yield GameError();
+    }
   }
 
   bool _hasReachedMax(GameState state) =>

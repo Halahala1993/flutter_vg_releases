@@ -17,7 +17,9 @@ class App extends StatelessWidget {
       title: 'Flutter Infinite Scroll',
       home: Scaffold(
         body: HomePage(),
-      ),
+      ),theme: new ThemeData(
+        primarySwatch: Colors.grey,
+      )
     );
   }
 }

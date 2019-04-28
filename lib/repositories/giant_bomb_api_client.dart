@@ -45,8 +45,6 @@ class GiantBombApiClient {
 
     print("Generate URL: " + url);
 
-    //final localTestUrl = "https://api.myjson.com/bins/1gptqa";
-
     final response = await dio.get(url);
     if (response.statusCode == 200) {
       final data = response.data;
@@ -54,6 +52,36 @@ class GiantBombApiClient {
       GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
 
       games = giantBombResponse.results;
+
+      return games;
+
+    } else {
+      throw Exception('error fetching games');
+    }
+  }
+
+  Future<List<Game>> getGamesSearchResults(int pageOffset, int limit, String query) async {
+
+    int tmp = int.parse(pageOffset.toString().substring(0, 1));
+    tmp++;
+
+    String page = tmp.toString().substring(0, 1);
+
+    final String url = 'search/?format=json&' +
+        'query=$query&' +
+        'sort=original_release_date:desc&' +
+        'limit=$limit&' +
+        'page=$page&' +
+        'resources=game&' +
+        'api_key=$apiKey';
+
+    print("Generate URL: " + url);
+
+    final response = await dio.get(url);
+    if (response.statusCode == 200) {
+
+      final data = response.data;
+      List<Game> games = new List<Game>.from(data["results"].map((x) => Game.fromJson(x)));
 
       return games;
 
