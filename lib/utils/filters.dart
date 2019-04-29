@@ -2,6 +2,7 @@ import 'package:video_game_releases/models/enums.dart';
 
 class Filters {
   static String platformFilter;
+  static String gameName;
   static DateTime fromDate;
   static DateTime toDate;
 
@@ -13,11 +14,28 @@ class Filters {
     }
   }
 
+  static void prepareGameNameFilter(String name) {
+    gameName = ",name:$name";
+  }
+
+  static String getGameName() {
+    if (gameName != null ) {
+      return gameName.substring(0, gameName.indexOf(':'));
+    } else {
+      return "";
+    }
+  }
+
   static String getFilters() {
     String filters = "";
     if (platformFilter != null) {
       filters += platformFilter;
     }
+
+    if (gameName != null) {
+      filters += gameName;
+    }
+
     return filters;
   }
 
@@ -25,6 +43,7 @@ class Filters {
     platformFilter = null;
     fromDate = null;
     toDate = null;
+    gameName = null;
   }
 
   /*static String getCustomDateFilters() {

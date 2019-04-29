@@ -5,6 +5,9 @@ class Constants {
   //URLs
   static const String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
+  static const String HOMEPAGE_HEADER = "GiantBomb Game API";
+  static const String HOMEPAGE_HEADER_FILTERED = "Filtered Results";
+  static const String HOMEPAGE_HEADER_SEARCHED = "Search Results";
 
   //Detail Screen Section Headers
   static const String SUMMARY = "Summary";

@@ -48,10 +48,8 @@ class GiantBombApiClient {
     final response = await dio.get(url);
     if (response.statusCode == 200) {
       final data = response.data;
-      List<Game> games = new List<Game>();
-      GiantBombResponse giantBombResponse = GiantBombResponse.fromJson(data);
 
-      games = giantBombResponse.results;
+      List<Game> games = new List<Game>.from(data["results"].map((x) => Game.fromJson(x)));
 
       return games;
 

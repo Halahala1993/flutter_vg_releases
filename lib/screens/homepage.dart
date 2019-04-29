@@ -11,6 +11,7 @@ import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
 import 'package:video_game_releases/screens/filter_widget.dart';
 import 'package:video_game_releases/screens/game_widget.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
+import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/filters.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   bool filteredRequest = false;
   Completer<void> _refreshCompleter;
   String _searchQuery;
+  List<Game> games;
 
   Icon searchIcon = new Icon(
     Icons.search,
@@ -38,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   );
 
   Widget appBarTitle = new Text(
-    "Recent Releases",
+    Constants.HOMEPAGE_HEADER,
     style: new TextStyle(color: Color(0xff3C3261)),
   );
 
@@ -146,23 +148,28 @@ class _HomePageState extends State<HomePage> {
     if (state is GameLoaded) {
       filteredRequest = false;
 
-      return buildGameList(state.games, state.hasReachedMax);
+      this.games = state.games != null || state.games.isNotEmpty ? state.games : null;
+
+      return buildGameList(state.hasReachedMax);
     } else if (state is GameFiltered) {
 
       filteredRequest = true;
+      this.games = state.games != null || state.games.isNotEmpty ? state.games : null;
 
-      return  buildGameList(state.games, state.hasReachedMax);
+      return  buildGameList(state.hasReachedMax);
     } else if (state is GameSearched) {
       filteredRequest = false;
+      this.games = state.games != null || state.games.isNotEmpty ? state.games : null;
 
-      return buildGameList(state.games, state.hasReachedMax);
+      return buildGameList(state.hasReachedMax);
     } else {
       return Container();
     }
   }
 
-  Widget buildGameList(List<Game> games, bool hasReachedMax) {
-    if (games.isEmpty) {
+  Widget buildGameList(bool hasReachedMax) {
+
+    if (games == null) {
       return Center(
         child: Text('no games'),
       );
@@ -253,6 +260,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isSearching = true;
       this._searchQuery = query;
+      this.games.clear();
       retrieveGameList();
     });
   }
@@ -264,12 +272,14 @@ class _HomePageState extends State<HomePage> {
         color: mainColor,
       );
       this.appBarTitle = new Text(
-        "Recent Releases",
+        Constants.HOMEPAGE_HEADER,
         style: new TextStyle(color: mainColor),
       );
       _isSearching = false;
       searchController.clear();
       _searchQuery = null;
+      this.games.clear();
+      Filters.clear();
       //moviePresenter.getPopularMovies();
       retrieveGameList();
     });

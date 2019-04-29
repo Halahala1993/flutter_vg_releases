@@ -19,7 +19,9 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
 
   DateTime fromDate = Filters.fromDate != null ? Filters.fromDate : new DateTime.now();
   DateTime toDate = Filters.toDate != null ? Filters.toDate : new DateTime(DateTime.now().year + 10);
+  String gameName = Filters.getGameName();
   List<Abbreviation> checkedConsoles = new List<Abbreviation>();
+  final formKey = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +43,14 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
             ),
           ),
           new ListTile(
-            title: new Text("Date range"),
-          ),
-
-          new ListTile(
-            title: new Text("From: " + DateUtil.formatDate(fromDate)),
-          ),
-          new ListTile(
-            title: new Text("To: " + DateUtil.formatDate(toDate)),
+            title: new Text("Date Range: " ),
+            subtitle: Row(
+              children: <Widget>[
+                buildTappableDate(fromDate),
+                Text(" - "),
+                buildTappableDate(toDate)
+              ],
+            ),
           ),
           Align(
             alignment: Alignment.bottomRight,
@@ -59,8 +61,22 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
                 child: Text("Modify"),
                 color: Colors.blueAccent,
                 onPressed: () {
-                  buildDatePickerDialog();
+                  buildDatePickerRangeDialog();
                 },
+              ),
+            ),
+          ),
+          Container(
+            height: 60,
+            width: 20,
+            child: new Form(
+              key: formKey,
+              child: TextFormField(
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 4, top: 20),
+                      labelText: 'Game name'
+                  ),
+                  onSaved: (val) => gameName = val,
               ),
             ),
           ),
@@ -128,13 +144,23 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
     );
   }
 
-  buildDatePickerDialog() async {
+  buildTappableDate(DateTime gameDate) {
+    return InkWell(
+      child: Text(DateUtil.formatDate(gameDate)),
+      onTap: () {
+        buildDatePickerDialog(gameDate);
+        print(gameDate);
+      },
+    );
+  }
+
+  buildDatePickerRangeDialog() async {
 
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
         context: context,
         initialFirstDate: fromDate != null ? fromDate : new DateTime.now(),
         initialLastDate: (new DateTime.now()).add(new Duration(days: 7)),
-        firstDate: new DateTime(2000),
+        firstDate: new DateTime(1980),
         lastDate: new DateTime(DateTime.now().year + 7)
     );
     if (picked != null && picked.length == 2) {
@@ -150,11 +176,39 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
     }
   }
 
+  buildDatePickerDialog(DateTime gameDate) async {
+    final DateTime dateTime = await showDatePicker(
+        context: context,
+        initialDate: fromDate != null ? fromDate : new DateTime.now(),
+        firstDate: new DateTime(1980),
+        lastDate: new DateTime(DateTime.now().year + 7)
+    );
+
+    if (dateTime != null) {
+      setState(() {
+        print("chosen: " + dateTime.toString());
+        print(gameDate);
+        if (gameDate == this.fromDate) {
+          fromDate = dateTime;
+
+          Filters.fromDate = dateTime;
+        } else {
+          toDate = dateTime;
+          Filters.toDate = dateTime;
+        }
+      });
+    }
+  }
+
   applyFilters() {
+    formKey.currentState.save();
+
     for (var item in this.checkedConsoles) {
       int platformId = FilterIds.platformIds[item];
       Filters.preparePlatformFilter(platformId);
     }
+
+    Filters.prepareGameNameFilter(gameName);
     widget.gameBloc.dispatch(FetchFilteredList());
     Navigator.of(context).pop();
   }

@@ -7,6 +7,7 @@ import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/repositories/giant_bomb_api_client.dart';
 import 'package:video_game_releases/repositories/giant_bomb_repository.dart';
 import 'package:video_game_releases/utils/dio.dart';
+import 'package:video_game_releases/utils/filters.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   //final http.Client httpClient;
@@ -71,6 +72,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (currentState is GameFiltered) {
 
         (currentState as GameFiltered).games.clear();
+
+        final games = await giantBombRepository.getListOfRecentGameReleases(0, 20);
+        yield GameLoaded(games: games, hasReachedMax: false);
+        return;
+      }
+
+      if (currentState is GameSearched) {
+
+        (currentState as GameSearched).games.clear();
 
         final games = await giantBombRepository.getListOfRecentGameReleases(0, 20);
         yield GameLoaded(games: games, hasReachedMax: false);
