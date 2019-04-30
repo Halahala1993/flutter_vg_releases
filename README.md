@@ -1,4 +1,5 @@
 # video_game_releases
+[![CircleCI](https://circleci.com/gh/Halahala1993/flutter_vg_releases/tree/master.svg?style=svg&circle-token=e0ed57ae7218299ad2d69038321bfdf71b1e6149)](https://circleci.com/gh/Halahala1993/flutter_vg_releases/tree/master)
 
 A new Flutter project.
 
