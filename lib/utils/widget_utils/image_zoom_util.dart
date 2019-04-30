@@ -14,6 +14,7 @@ class ImageZoom extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
         ),
         child: PhotoView(
+          key: Key("image_zoom"),
           heroTag: url,
           imageProvider: NetworkImage(
             url,

@@ -68,7 +68,7 @@ class _ImagesListState extends State<ImagesList> {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildSimilarGamePoster(i),
+                  child: buildGameImage(i),
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
@@ -102,9 +102,9 @@ class _ImagesListState extends State<ImagesList> {
         });
   }
 
-  Stack buildSimilarGamePoster(int index) {
+  Stack buildGameImage(int index) {
 
-    String gamePoster = this.gameImages[index].mediumUrl;
+    String gameImage = this.gameImages[index].mediumUrl;
 
     var rand = Random();
     int randomNumber = rand.nextInt(200);
@@ -113,7 +113,7 @@ class _ImagesListState extends State<ImagesList> {
       children: <Widget>[
 
         Hero(
-          tag: gamePoster != null ? "$gamePoster" : "image_$randomNumber",
+          tag: gameImage != null ? "$gameImage" : "image_$randomNumber",
           child: Container(
           margin: const EdgeInsets.only(left: 2.0, right: 2.0),
           width: 240.0,
