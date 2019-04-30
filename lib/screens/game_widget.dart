@@ -91,7 +91,8 @@ class GameWidget extends StatelessWidget {
 
       if (platform.abbreviation != null) {
         children.add(
-            Expanded(
+            Container(
+              width: 80,
                 child: PlatformBadgeBuilder.buildPlatformBadge(
                     platform.abbreviation)
             )
@@ -99,11 +100,19 @@ class GameWidget extends StatelessWidget {
       }
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: children
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.end,
+      children: children,
     );
+    // return Row(
+    //   crossAxisAlignment: CrossAxisAlignment.end,
+    //     mainAxisAlignment: MainAxisAlignment.end,
+    //     children: <Widget>[
+    //       Wrap(
+    //         children: children
+    //       )
+    //     ],
+    // );
   }
 
   Widget buildGameIcon() {

@@ -80,29 +80,34 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
               ),
             ),
           ),
-          new ListTile(
-            title: new Text("Console Filters: "),
-          ),
-          Container(
-            height: 300,
-            width: 300,
-            child: ListView.builder(
-              itemCount: abbreviationValues.map.keys.length,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return CheckboxListTile(
-                  // key: PageStorageKey<Abbreviation>(),
-                    title: new Text(Abbreviation.values[index].toString().replaceAll("Abbreviation.", "")),
-                    onChanged: (bool value) {
-                      print("Checked");
-                      handleCheckState(value, Abbreviation.values[index]);
-                      //Navigator.of(context).pop();
+          ExpansionTile(
+            title: Text("Console Filters: "),
+            children: <Widget>[
+              Container(
+                  height: 300,
+                  width: 300,
+                  child: ListView.builder(
+                    itemCount: abbreviationValues.map.keys.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CheckboxListTile(
+                        // key: PageStorageKey<Abbreviation>(),
+                          title: new Text(Abbreviation.values[index].toString().replaceAll("Abbreviation.", "")),
+                          onChanged: (bool value) {
+                            print("Checked");
+                            handleCheckState(value, Abbreviation.values[index]);
+                            //Navigator.of(context).pop();
+                          },
+                          value: this.checkedConsoles.contains(Abbreviation.values[index])
+                      );
                     },
-                    value: this.checkedConsoles.contains(Abbreviation.values[index])
-                );
-              },
-            ),
-          ),
+                  ),
+                ),
+            ],),
+          // new ListTile(
+          //   title: new Text("Console Filters: "),
+          // ),
+          
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,

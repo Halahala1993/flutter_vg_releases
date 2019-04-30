@@ -41,6 +41,28 @@ class PlatformBadgeBuilder {
         return Colors.red;
       case Abbreviation.XONE: 
         return Colors.green;
+      case Abbreviation.IPHN: 
+        return Colors.blueGrey;
+      case Abbreviation.ANDR: 
+        return Colors.lightGreen;
+      case Abbreviation.MAC: 
+        return Colors.blueGrey;
+      case Abbreviation.LIN: 
+        return Colors.deepOrange;
+      case Abbreviation.IPAD: 
+        return Colors.blueGrey;
+      case Abbreviation.ARC: 
+        return Colors.grey;
+      case Abbreviation.PSNV: 
+        return Colors.blue;
+      case Abbreviation.THE_3_DS: 
+        return Colors.red;
+      case Abbreviation.VITA: 
+        return Colors.blue;
+      case Abbreviation.APTV: 
+        return Colors.blueGrey;
+      case Abbreviation.XBOX: 
+        return Colors.green;
       default:
           return Colors.grey;
     }

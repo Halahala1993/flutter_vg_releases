@@ -23,33 +23,26 @@ final imageTagsValues = new EnumValues({
     "All Images,Virtual Reality": ImageTags.ALL_IMAGES_VIRTUAL_REALITY
 });
 
-enum Abbreviation { PC, XONE, PS4, NSW}
-//enum Abbreviation { PC, XONE, PS4, NSW, IPHN, ANDR, MAC, LIN, IPAD, ARC, PSNV, THE_3_DS, VITA, APTV, XBOX }
+// enum Abbreviation { PC, XONE, PS4, NSW}
+enum Abbreviation { PC, XONE, PS4, NSW, IPHN, ANDR, MAC, LIN, IPAD, ARC, PSNV, THE_3_DS, VITA, APTV, XBOX }
 
 final abbreviationValues = new EnumValues({
+    "ANDR": Abbreviation.ANDR,
+    "APTV": Abbreviation.APTV,
+    "ARC": Abbreviation.ARC,
+    "IPAD": Abbreviation.IPAD,
+    "IPHN": Abbreviation.IPHN,
+    "LIN": Abbreviation.LIN,
+    "MAC": Abbreviation.MAC,
     "NSW": Abbreviation.NSW,
     "PC": Abbreviation.PC,
     "PS4": Abbreviation.PS4,
+    "PSNV": Abbreviation.PSNV,
+    "3DS": Abbreviation.THE_3_DS,
+    "VITA": Abbreviation.VITA,
+    "XBOX": Abbreviation.XBOX,
     "XONE": Abbreviation.XONE
 });
-
-// final abbreviationValues = new EnumValues({
-//     "ANDR": Abbreviation.ANDR,
-//     "APTV": Abbreviation.APTV,
-//     "ARC": Abbreviation.ARC,
-//     "IPAD": Abbreviation.IPAD,
-//     "IPHN": Abbreviation.IPHN,
-//     "LIN": Abbreviation.LIN,
-//     "MAC": Abbreviation.MAC,
-//     "NSW": Abbreviation.NSW,
-//     "PC": Abbreviation.PC,
-//     "PS4": Abbreviation.PS4,
-//     "PSNV": Abbreviation.PSNV,
-//     "3DS": Abbreviation.THE_3_DS,
-//     "VITA": Abbreviation.VITA,
-//     "XBOX": Abbreviation.XBOX,
-//     "XONE": Abbreviation.XONE
-// });
 
 
 enum Name { PC, XBOX_ONE, PLAY_STATION_4, NINTENDO_SWITCH, I_PHONE, ANDROID, MAC, LINUX, I_PAD, ARCADE, PLAY_STATION_NETWORK_VITA, NINTENDO_3_DS, PLAY_STATION_VITA, APPLE_TV, XBOX }
