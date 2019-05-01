@@ -55,10 +55,28 @@ class Filters {
   
 
 class FilterIds {
-  static const Map<Abbreviation, int> platformIds = ({
-    Abbreviation.PS4 : 146, 
-    Abbreviation.PC : 94, 
-    Abbreviation.XONE : 145, 
-    Abbreviation.NSW : 157, 
+  static const Map<AbbreviationFilter, int> platformIds = ({
+    AbbreviationFilter.PS4 : 146, 
+    AbbreviationFilter.PC : 94, 
+    AbbreviationFilter.XONE : 145, 
+    AbbreviationFilter.NSW : 157, 
+    AbbreviationFilter.ARC : 84, 
+    AbbreviationFilter.IPHN : 96, 
+    AbbreviationFilter.MAC : 17, 
+    AbbreviationFilter.XBOX : 32, 
+    AbbreviationFilter.N64 : 43, 
+    AbbreviationFilter.PS1 : 22, 
+    AbbreviationFilter.GCN : 23, 
+    AbbreviationFilter.PS2 : 19, 
+    AbbreviationFilter.WII : 36, 
+    AbbreviationFilter.PS3 : 35, 
+    AbbreviationFilter.WIIU : 139, 
+    AbbreviationFilter.ANDR : 123, 
+    AbbreviationFilter.APTV : 159, 
+    AbbreviationFilter.LIN : 152, 
+    AbbreviationFilter.PSNV : 143, 
+    AbbreviationFilter.THE_3_DS : 117, 
+    AbbreviationFilter.VITA : 129, 
+    AbbreviationFilter.IPAD : 121  
   });
 }

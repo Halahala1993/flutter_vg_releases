@@ -55,7 +55,9 @@ class PlatformBadgeBuilder {
         return Colors.grey;
       case Abbreviation.PSNV: 
         return Colors.blue;
-      case Abbreviation.THE_3_DS: 
+      case Abbreviation.THE_3DS: 
+        return Colors.red;
+      case Abbreviation.THE_3DSE: 
         return Colors.red;
       case Abbreviation.VITA: 
         return Colors.blue;

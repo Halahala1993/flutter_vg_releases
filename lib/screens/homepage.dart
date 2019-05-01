@@ -45,8 +45,6 @@ class _HomePageState extends State<HomePage> {
   );
 
 
-  List<Abbreviation> checkedConsoles = new List<Abbreviation>();
-
   _HomePageState() {
     _scrollController.addListener(_onScroll);
   }
@@ -292,14 +290,6 @@ class _HomePageState extends State<HomePage> {
       _gameBloc.dispatch(FetchFilteredList());
     } else {
       _gameBloc.dispatch(Fetch());
-    }
-  }
-
-  handleCheckState(bool checked, Abbreviation value) {
-    if (checked) {
-        this.checkedConsoles.add(value);
-    } else {
-        this.checkedConsoles.remove(value);
     }
   }
   

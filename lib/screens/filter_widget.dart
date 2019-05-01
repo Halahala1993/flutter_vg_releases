@@ -20,7 +20,7 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
   DateTime fromDate = Filters.fromDate != null ? Filters.fromDate : new DateTime.now();
   DateTime toDate = Filters.toDate != null ? Filters.toDate : new DateTime(DateTime.now().year + 10);
   String gameName = Filters.getGameName();
-  List<Abbreviation> checkedConsoles = new List<Abbreviation>();
+  List<AbbreviationFilter> checkedConsoles = new List<AbbreviationFilter>();
   final formKey = new GlobalKey<FormState>();
 
   @override
@@ -34,7 +34,7 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
         children: <Widget>[
 
           Container(
-            height: 50,
+            height: 20,
             child: RaisedButton(
               color: Colors.blueGrey,
               onPressed: () async {
@@ -87,18 +87,18 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
                   height: 300,
                   width: 300,
                   child: ListView.builder(
-                    itemCount: abbreviationValues.map.keys.length,
+                    itemCount: abbreviationFilterValues.map.keys.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return CheckboxListTile(
-                        // key: PageStorageKey<Abbreviation>(),
-                          title: new Text(Abbreviation.values[index].toString().replaceAll("Abbreviation.", "")),
+                        // key: PageStorageKey<AbbreviationFilter>(),
+                          title: new Text(AbbreviationFilter.values[index].toString().replaceAll("AbbreviationFilter.", "")),
                           onChanged: (bool value) {
                             print("Checked");
-                            handleCheckState(value, Abbreviation.values[index]);
+                            handleCheckState(value, AbbreviationFilter.values[index]);
                             //Navigator.of(context).pop();
                           },
-                          value: this.checkedConsoles.contains(Abbreviation.values[index])
+                          value: this.checkedConsoles.contains(AbbreviationFilter.values[index])
                       );
                     },
                   ),
@@ -225,7 +225,7 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
 
   }
 
-  handleCheckState(bool checked, Abbreviation value) {
+  handleCheckState(bool checked, AbbreviationFilter value) {
     if (checked) {
       this.checkedConsoles.add(value);
     } else {
