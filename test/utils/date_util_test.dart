@@ -16,7 +16,9 @@ void main() {
       tmp.lastIndexOf("-") + 1, tmp.length
     );
 
-    expect(day.toString(), formattedDay);
+    var testDay = day.toString().length == 1 ? "0${day.toString()}" : day.toString();
+
+    expect(testDay.toString(), formattedDay);
 
   });
 
@@ -29,7 +31,10 @@ void main() {
         formattedDate.lastIndexOf("-") + 1, formattedDate.length
     );
 
-    expect(day.toString(), formattedDay);
+    var testDay = day.toString().length == 1 ? "0${day.toString()}" : day.toString();
+
+
+    expect(testDay, formattedDay);
 
   });
 
