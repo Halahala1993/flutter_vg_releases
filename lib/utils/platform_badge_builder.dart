@@ -6,7 +6,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 class PlatformBadgeBuilder {
 
   static Widget buildPlatformBadge (Abbreviation platform) {
-    String platformName = platform.toString().replaceAll("Abbreviation.", "");
+
+//    abbreviationValues.reverse;
+    String platformName = abbreviationValues.reverse[platform];
 
     if (platformName == null || platformName.isEmpty || platformName == "null") {
       return Container(

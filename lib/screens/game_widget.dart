@@ -103,6 +103,7 @@ class GameWidget extends StatelessWidget {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.end,
       children: children,
+      spacing: .5,
     );
     // return Row(
     //   crossAxisAlignment: CrossAxisAlignment.end,

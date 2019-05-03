@@ -92,7 +92,7 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
                     itemBuilder: (BuildContext context, int index) {
                       return CheckboxListTile(
                         // key: PageStorageKey<AbbreviationFilter>(),
-                          title: new Text(AbbreviationFilter.values[index].toString().replaceAll("AbbreviationFilter.", "")),
+                          title: new Text(abbreviationFilterValues.reverse[AbbreviationFilter.values[index]]),
                           onChanged: (bool value) {
                             print("Checked");
                             handleCheckState(value, AbbreviationFilter.values[index]);
