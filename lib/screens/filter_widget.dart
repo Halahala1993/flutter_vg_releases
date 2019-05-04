@@ -59,7 +59,7 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
               height: 40,
               child: RaisedButton(
                 child: Text("Modify"),
-                color: Colors.blueAccent,
+                color: Colors.blueGrey,
                 onPressed: () {
                   buildDatePickerRangeDialog();
                 },
@@ -117,9 +117,8 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
                 child: Container(
                   width: 100,
                   height: 40,
-                  child: RaisedButton(
+                  child: FlatButton(
                     child: Text("Clear"),
-                    color: Colors.blueGrey,
                     onPressed: () {
                       clearFilters();
                     },
@@ -133,7 +132,7 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
                   height: 40,
                   child: RaisedButton(
                     child: Text("Apply"),
-                    color: Colors.blueAccent,
+                    color: Colors.blueGrey,
                     onPressed: () {
                       applyFilters();
                     },
@@ -151,7 +150,14 @@ class _FilterWidgetState extends State<FilterWidget> with SingleTickerProviderSt
 
   buildTappableDate(DateTime gameDate) {
     return InkWell(
-      child: Text(DateUtil.formatDate(gameDate)),
+      child: Text(
+          DateUtil.formatDate(gameDate),
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.lightBlue,
+          decoration: TextDecoration.underline
+        ),
+      ),
       onTap: () {
         buildDatePickerDialog(gameDate);
         print(gameDate);
