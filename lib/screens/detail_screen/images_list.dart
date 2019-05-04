@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_game_releases/models/image.dart';
 import 'package:video_game_releases/utils/constants.dart';
@@ -63,11 +64,14 @@ class _ImagesListState extends State<ImagesList> {
         itemCount: this.gameImages == null ? 0 : this.gameImages.length,
         itemBuilder: (context, i) {
           return new Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new FlatButton(
                 child: new Padding(
                   padding: const EdgeInsets.only(
-                      right: 8, left: 8, bottom: 8),
+                      right: 8, left: 8),
                   child: buildGameImage(i),
                 ),
                 padding: const EdgeInsets.all(0.0),
@@ -133,16 +137,17 @@ class _ImagesListState extends State<ImagesList> {
     );
   }
 
-  FadeInImage retrieveGamePoster(int index) {
+  CachedNetworkImage retrieveGamePoster(int index) {
 
     String gamePoster = this.gameImages[index].mediumUrl;
 
     if (gamePoster != null && gamePoster.isNotEmpty) {
-      return FadeInImage.assetNetwork(
-          fit: BoxFit.cover,
-          placeholderScale: 0.4,
-          placeholder: 'assets/image_loading.gif',
-          image: gamePoster
+      return CachedNetworkImage(
+        fit: BoxFit.cover,
+        imageUrl: gamePoster,
+        placeholder: (context, url){
+          new CircularProgressIndicator();
+        },
       );
     } else {
       return null;

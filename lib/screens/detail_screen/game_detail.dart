@@ -364,10 +364,15 @@ class GameDetailState extends State<GameDetailScreen> {
         title: Text(categoryValues[category].toString()),
         onExpansionChanged: (bool expanded) => handleTileClickState(expanded, category),
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 10, bottom: 5),
-            child: determineSubsectionWidget(category),
-          )
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //your elements here
+              determineSubsectionWidget(category)
+            ],
+          ),
         ]
     );
   }

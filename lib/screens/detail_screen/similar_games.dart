@@ -94,6 +94,9 @@ class _SimilarGamesListState extends State<SimilarGamesList> {
         itemCount: similarGames == null ? 0 : similarGames.length,
         itemBuilder: (context, i) {
           return new Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new FlatButton(
                 child: new Padding(
@@ -153,17 +156,18 @@ class _SimilarGamesListState extends State<SimilarGamesList> {
     );
   }
 
-  FadeInImage retrieveGamePoster(int index) {
+  CachedNetworkImage retrieveGamePoster(int index) {
 
     String gamePoster = similarGames[index].image.originalUrl;
 
     if (gamePoster != null && gamePoster.isNotEmpty) {
-      return FadeInImage.assetNetwork(
-          fit: BoxFit.fitHeight,
-          placeholderScale: .3,
-          imageScale: 1.0,
-          placeholder: 'assets/image_loading.gif',
-          image: gamePoster
+
+      return CachedNetworkImage(
+        fit: BoxFit.fitHeight,
+        imageUrl: gamePoster,
+        placeholder: (context, url){
+          new CircularProgressIndicator();
+        },
       );
     } else {
       return null;

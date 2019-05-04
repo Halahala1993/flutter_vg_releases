@@ -156,16 +156,24 @@ class _VideosListState extends State<VideosList> {
     );
   }
 
-  FadeInImage retrieveGamePoster(int index) {
+  CachedNetworkImage retrieveGamePoster(int index) {
 
     String gamePoster = gameVideos[index].image.smallUrl;
     
     if (gamePoster != null && gamePoster.isNotEmpty) {
-      return FadeInImage.assetNetwork(
+
+      return new CachedNetworkImage(
+        fit: BoxFit.cover,
+        imageUrl: gamePoster,
+        placeholder: (context, url) {
+          new CircularProgressIndicator();
+        },
+      );
+      /*return FadeInImage.assetNetwork(
         fit: BoxFit.cover,
           placeholder: 'assets/image_loading.gif',
           image: gamePoster
-      );
+      );*/
     } else {
       return null;
     }

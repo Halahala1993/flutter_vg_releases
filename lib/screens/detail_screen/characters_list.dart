@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
@@ -151,15 +152,17 @@ class _CharactersListState extends State<CharactersList> {
     );
   }
 
-  FadeInImage retrieveGamePoster(int index) {
+  CachedNetworkImage retrieveGamePoster(int index) {
 
     String gamePoster = gameCharacters[index].image.smallUrl;
 
     if (gamePoster != null && gamePoster.isNotEmpty) {
-      return FadeInImage.assetNetwork(
-          fit: BoxFit.cover,
-          placeholder: 'assets/image_loading.gif',
-          image: gamePoster
+      return CachedNetworkImage(
+        fit: BoxFit.cover,
+        imageUrl: gamePoster,
+        placeholder: (context, url){
+          new CircularProgressIndicator();
+        },
       );
     } else {
       return null;
