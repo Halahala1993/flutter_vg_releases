@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
           } else {
             AppPreferences.saveGBApiKey(apiKey);
             retrieveGameList();
-            Navigator.of(context).pop();
+            Navigator.of(context).pop("OK");
 
           }
         },
@@ -90,14 +90,19 @@ class _HomePageState extends State<HomePage> {
 
     AppPreferences.getGBApiKey().then((apiKey) {
       if (apiKey != null && apiKey.isNotEmpty) {
-        this.apiKey = apiKey;
+      this.apiKey = apiKey;
         _gameBloc.dispatch(Fetch());
       } else {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => buildApiKeyInputDialog(),
-          );
+          //Force the dialog to keep showing unless an API key is provided.
+          var result;
+          do {
+             result = await showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => buildApiKeyInputDialog(),
+              );
+             print(result);
+          }while(result == null);
         });
       }
     });

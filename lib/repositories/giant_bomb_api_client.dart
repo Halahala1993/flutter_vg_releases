@@ -28,6 +28,10 @@ class GiantBombApiClient {
 
   Future<List<Game>> getListOfRecentGameReleases(int startIndex, int limit, bool filtered) async {
 
+    if (apiKey == null || apiKey.isEmpty) {//Have to re-retrieve saved API key. TODO: setup API key retrieval properly.
+      apiKey = await AppPreferences.getGBApiKey();
+    }
+
     String filters;
     if (filtered) {
       filters = DateUtil.retrieveDateFilter() + Filters.getFilters();
