@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/character.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
 class CharactersList extends StatefulWidget {
@@ -17,7 +18,7 @@ class CharactersList extends StatefulWidget {
   _CharactersListState createState() => _CharactersListState();
 }
 
-class _CharactersListState extends State<CharactersList> {
+class _CharactersListState extends State<CharactersList> with BaseCategoryList {
 
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
@@ -99,7 +100,12 @@ class _CharactersListState extends State<CharactersList> {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildSimilarGamePoster(i),
+                  child: buildCategoryPoster(
+                      this.gameCharacters[i].image.smallUrl,
+                      BoxFit.cover,
+                      180.0,
+                      320.0
+                  ),
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
@@ -129,44 +135,6 @@ class _CharactersListState extends State<CharactersList> {
             ],
           );
         });
-  }
-
-  Stack buildSimilarGamePoster(int index) {
-    return new Stack(
-      children: <Widget>[
-
-        new Container(
-          width: 320.0,
-          height: 180.0,
-          decoration: BoxDecoration(
-            borderRadius: new BorderRadius.circular(1.0),
-            color: Colors.grey,
-            boxShadow: [
-              new BoxShadow(
-                  color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
-            ],
-          ),
-          child: retrieveGamePoster(index),
-        )
-      ],
-    );
-  }
-
-  CachedNetworkImage retrieveGamePoster(int index) {
-
-    String gamePoster = gameCharacters[index].image.smallUrl;
-
-    if (gamePoster != null && gamePoster.isNotEmpty) {
-      return CachedNetworkImage(
-        fit: BoxFit.cover,
-        imageUrl: gamePoster,
-        placeholder: (context, url){
-          new CircularProgressIndicator();
-        },
-      );
-    } else {
-      return null;
-    }
   }
 
   setupCharacterList(Game game) {

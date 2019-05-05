@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
+import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
 import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
@@ -18,7 +19,7 @@ class SimilarGamesList  extends StatefulWidget {
   _SimilarGamesListState createState() => _SimilarGamesListState();
 }
 
-class _SimilarGamesListState extends State<SimilarGamesList> {
+class _SimilarGamesListState extends State<SimilarGamesList> with BaseCategoryList {
 
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
@@ -102,7 +103,12 @@ class _SimilarGamesListState extends State<SimilarGamesList> {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildSimilarGamePoster(i),
+                  child: buildCategoryPoster(
+                      this.similarGames[i].image.originalUrl,
+                      BoxFit.fitHeight,
+                      160.0,
+                      133.5
+                  ),
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
@@ -132,46 +138,6 @@ class _SimilarGamesListState extends State<SimilarGamesList> {
             ],
           );
         });
-  }
-
-  Stack buildSimilarGamePoster(int index) {
-    return new Stack(
-      children: <Widget>[
-
-        new Container(
-          margin: const EdgeInsets.only(left: 2.0, right: 2.0),
-          width: 100.0,
-          height: 155.0,
-          decoration: BoxDecoration(
-            borderRadius: new BorderRadius.circular(1.0),
-            color: Colors.grey,
-            boxShadow: [
-              new BoxShadow(
-                  color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
-            ],
-          ),
-          child: retrieveGamePoster(index),
-        )
-      ],
-    );
-  }
-
-  CachedNetworkImage retrieveGamePoster(int index) {
-
-    String gamePoster = similarGames[index].image.originalUrl;
-
-    if (gamePoster != null && gamePoster.isNotEmpty) {
-
-      return CachedNetworkImage(
-        fit: BoxFit.fitHeight,
-        imageUrl: gamePoster,
-        placeholder: (context, url){
-          new CircularProgressIndicator();
-        },
-      );
-    } else {
-      return null;
-    }
   }
 
   setupSimilarGames(Game game) {

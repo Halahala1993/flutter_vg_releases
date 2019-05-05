@@ -247,8 +247,8 @@ class GameDetailState extends State<GameDetailScreen> {
       child: new Container(
         margin: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
         child: new Container(
-          width: 150.0,
-          height: 245.0,
+          width: 320.0,
+          height: 210.0,
         ),
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.circular(1.0),

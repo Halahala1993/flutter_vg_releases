@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_game_releases/models/image.dart';
+import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/widget_utils/image_zoom_util.dart';
 
@@ -16,7 +17,7 @@ class ImagesList extends StatefulWidget {
   _ImagesListState createState() => _ImagesListState();
 }
 
-class _ImagesListState extends State<ImagesList> {
+class _ImagesListState extends State<ImagesList> with BaseCategoryList {
 
   final Color mainColor = Colors.black38;
   List<Images> gameImages;
@@ -72,7 +73,12 @@ class _ImagesListState extends State<ImagesList> {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8),
-                  child: buildGameImage(i),
+                  child: buildCategoryPoster(
+                      this.gameImages[i].mediumUrl,
+                      BoxFit.cover,
+                      135.0,
+                      240.0
+                  ),
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
@@ -104,53 +110,5 @@ class _ImagesListState extends State<ImagesList> {
             ],
           );
         });
-  }
-
-  Stack buildGameImage(int index) {
-
-    String gameImage = this.gameImages[index].mediumUrl;
-
-    var rand = Random();
-    int randomNumber = rand.nextInt(200);
-
-    return new Stack(
-      children: <Widget>[
-
-        Hero(
-          tag: gameImage != null ? "$gameImage" : "image_$randomNumber",
-          child: Container(
-          margin: const EdgeInsets.only(left: 2.0, right: 2.0),
-          width: 240.0,
-          height: 135.0,
-          decoration: BoxDecoration(
-            borderRadius: new BorderRadius.circular(1.0),
-            color: Colors.grey,
-            boxShadow: [
-              new BoxShadow(
-                  color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
-            ],
-          ),
-          child: retrieveGamePoster(index),
-        ),
-        )
-      ],
-    );
-  }
-
-  CachedNetworkImage retrieveGamePoster(int index) {
-
-    String gamePoster = this.gameImages[index].mediumUrl;
-
-    if (gamePoster != null && gamePoster.isNotEmpty) {
-      return CachedNetworkImage(
-        fit: BoxFit.cover,
-        imageUrl: gamePoster,
-        placeholder: (context, url){
-          new CircularProgressIndicator();
-        },
-      );
-    } else {
-      return null;
-    }
   }
 }

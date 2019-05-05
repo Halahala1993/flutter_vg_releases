@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
+import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
 import 'package:video_game_releases/utils/constants.dart';
 //import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +23,7 @@ class VideosList extends StatefulWidget {
   _VideosListState createState() => _VideosListState();
 }
 
-class _VideosListState extends State<VideosList> {
+class _VideosListState extends State<VideosList>  with BaseCategoryList {
 
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
@@ -104,14 +105,17 @@ class _VideosListState extends State<VideosList> {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildSimilarGamePoster(i),
+                  child: buildCategoryPoster(
+                          this.gameVideos[i].image.smallUrl,
+                          BoxFit.cover,
+                          180.0,
+                          320.0
+                        )
                 ),
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () async {
                   String youtubeId = this.gameVideos[i].youtubeId;
                   String url = Constants.YOUTUBE_URL + youtubeId;
-
-//                  await launch(url);
 
                   await WebLauncher.launchUrl(url);
                 },
@@ -135,49 +139,6 @@ class _VideosListState extends State<VideosList> {
         });
   }
 
-  Stack buildSimilarGamePoster(int index) {
-    return new Stack(
-      children: <Widget>[
-
-        new Container(
-          width: 320.0,
-          height: 180.0,
-          decoration: BoxDecoration(
-            borderRadius: new BorderRadius.circular(1.0),
-            color: Colors.grey,
-            boxShadow: [
-              new BoxShadow(
-                  color: mainColor, blurRadius: 1.0, offset: new Offset(2.0, 5.0))
-            ],
-          ),
-          child: retrieveGamePoster(index),
-        )
-      ],
-    );
-  }
-
-  CachedNetworkImage retrieveGamePoster(int index) {
-
-    String gamePoster = gameVideos[index].image.smallUrl;
-    
-    if (gamePoster != null && gamePoster.isNotEmpty) {
-
-      return new CachedNetworkImage(
-        fit: BoxFit.cover,
-        imageUrl: gamePoster,
-        placeholder: (context, url) {
-          new CircularProgressIndicator();
-        },
-      );
-      /*return FadeInImage.assetNetwork(
-        fit: BoxFit.cover,
-          placeholder: 'assets/image_loading.gif',
-          image: gamePoster
-      );*/
-    } else {
-      return null;
-    }
-  }
 
   setupVideos(Game game) {
     if (game.videos != null  && game.videos.length != 0) {
