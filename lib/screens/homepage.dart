@@ -13,6 +13,7 @@ import 'package:video_game_releases/screens/game_widget.dart';
 import 'package:video_game_releases/utils/app_preferences.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/filters.dart';
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -170,6 +171,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  @widget
   Widget buildGameList(bool hasReachedMax) {
 
     if (games == null) {
@@ -213,6 +215,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @widget
   IconButton buildFilterButton() {
     return new IconButton(
       icon: new Icon(
@@ -224,6 +227,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @widget
   IconButton buildSearchBar() {
     return new IconButton(icon: searchIcon,
         onPressed: () {

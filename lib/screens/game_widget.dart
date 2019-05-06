@@ -8,6 +8,8 @@ import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/utils/date_util.dart';
 import 'package:video_game_releases/utils/platform_badge_builder.dart';
+import 'package:flutter_image/network.dart';
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
 class GameWidget extends StatelessWidget {
   final Game game;
@@ -80,6 +82,7 @@ class GameWidget extends StatelessWidget {
     );
   }
 
+  @widget
   Widget buildPlatformBadge() {
     List<Widget> children = new List();
 
@@ -116,7 +119,8 @@ class GameWidget extends StatelessWidget {
     // );
   }
 
-  Widget buildGameIcon() {
+  
+  Hero buildGameIcon() {
     String gameThumbUrl = game.image.originalUrl;
     var rand = Random();
     int randomNumber = rand.nextInt(200);
@@ -130,9 +134,9 @@ class GameWidget extends StatelessWidget {
         child: new Container(
           width: 96.0,
           height: 120.0,
-          child: FadeInImage.assetNetwork(
-              placeholder: 'assets/image_loading.gif',
-              image: gameThumbUrl
+          child: FadeInImage(
+              placeholder: AssetImage('assets/image_loading.gif'),
+              image: NetworkImageWithRetry(gameThumbUrl)
           ),
         ),
       ),
