@@ -1,14 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
-import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
+import 'package:video_game_releases/screens/detail_screen/category_image.dart';
 import 'package:video_game_releases/utils/constants.dart';
 //import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
 
 //import 'package:webview_flutter/webview_flutter.dart';
@@ -23,7 +21,7 @@ class VideosList extends StatefulWidget {
   _VideosListState createState() => _VideosListState();
 }
 
-class _VideosListState extends State<VideosList>  with BaseCategoryList {
+class _VideosListState extends State<VideosList> {
 
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
@@ -105,9 +103,8 @@ class _VideosListState extends State<VideosList>  with BaseCategoryList {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildCategoryPoster(
+                  child: CategoryImage(
                           this.gameVideos[i].image.smallUrl,
-                          BoxFit.cover,
                           180.0,
                           320.0
                         )

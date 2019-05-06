@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_game_releases/models/image.dart';
-import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
+import 'package:video_game_releases/screens/detail_screen/category_image.dart';
 import 'package:video_game_releases/utils/constants.dart';
 import 'package:video_game_releases/utils/widget_utils/image_zoom_util.dart';
 
@@ -17,7 +17,7 @@ class ImagesList extends StatefulWidget {
   _ImagesListState createState() => _ImagesListState();
 }
 
-class _ImagesListState extends State<ImagesList> with BaseCategoryList {
+class _ImagesListState extends State<ImagesList> {
 
   final Color mainColor = Colors.black38;
   List<Images> gameImages;
@@ -73,9 +73,8 @@ class _ImagesListState extends State<ImagesList> with BaseCategoryList {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8),
-                  child: buildCategoryPoster(
+                  child: CategoryImage(
                       this.gameImages[i].mediumUrl,
-                      BoxFit.cover,
                       135.0,
                       240.0
                   ),

@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/character.dart';
 import 'package:video_game_releases/models/game.dart';
-import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
+import 'package:video_game_releases/screens/detail_screen/category_image.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
 class CharactersList extends StatefulWidget {
@@ -18,7 +17,7 @@ class CharactersList extends StatefulWidget {
   _CharactersListState createState() => _CharactersListState();
 }
 
-class _CharactersListState extends State<CharactersList> with BaseCategoryList {
+class _CharactersListState extends State<CharactersList> {
 
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
@@ -100,9 +99,8 @@ class _CharactersListState extends State<CharactersList> with BaseCategoryList {
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildCategoryPoster(
+                  child: CategoryImage(
                       this.gameCharacters[i].image.smallUrl,
-                      BoxFit.cover,
                       180.0,
                       320.0
                   ),

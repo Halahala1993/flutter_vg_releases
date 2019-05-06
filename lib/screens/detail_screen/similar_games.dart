@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
-import 'package:video_game_releases/screens/detail_screen/base_category_list.dart';
+import 'package:video_game_releases/screens/detail_screen/category_image.dart';
 import 'package:video_game_releases/screens/detail_screen/game_detail.dart';
 import 'package:video_game_releases/utils/constants.dart';
 
@@ -19,7 +19,7 @@ class SimilarGamesList  extends StatefulWidget {
   _SimilarGamesListState createState() => _SimilarGamesListState();
 }
 
-class _SimilarGamesListState extends State<SimilarGamesList> with BaseCategoryList {
+class _SimilarGamesListState extends State<SimilarGamesList> {
 
   final Color mainColor = Colors.black38;
   final DetailGameBloc _gameBloc = DetailGameBloc();
@@ -103,9 +103,8 @@ class _SimilarGamesListState extends State<SimilarGamesList> with BaseCategoryLi
                 child: new Padding(
                   padding: const EdgeInsets.only(
                       right: 8, left: 8, bottom: 8),
-                  child: buildCategoryPoster(
+                  child: CategoryImage(
                       this.similarGames[i].image.originalUrl,
-                      BoxFit.fitHeight,
                       160.0,
                       133.5
                   ),
