@@ -23,6 +23,8 @@ class Constants {
   //Errors:
   static const String ERROR_RETRIEVE_DETAILS = "Error retrieving additional details";
   static const String COULD_NOT_LOAD_LINK = "Error: could not load url";
+  static const String COULD_NOT_LOAD_GB_URL = "Could not load Gaint Bomb video, long press to try Youtube mirror.";
+  static const String COULD_NOT_LOAD_YOUTUBE_URL = "Error: Could not load or find Youtube ID of selected video.";
 
   //Status Codes
   static const int STATUS_100 = 100;

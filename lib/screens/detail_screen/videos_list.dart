@@ -1,13 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:video_game_releases/bloc/bloc.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/models/videos.dart';
 import 'package:video_game_releases/screens/detail_screen/category_image.dart';
+import 'package:video_game_releases/utils/app_preferences.dart';
 import 'package:video_game_releases/utils/constants.dart';
 //import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
 import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 //import 'package:webview_flutter/webview_flutter.dart';
 
@@ -28,6 +32,8 @@ class _VideosListState extends State<VideosList> {
   List<Videos> gameVideos;
   Game game;
   bool videosAvailable = false;
+  VideoPlayerController _videoPlayerController;
+  ChewieController _chewieController;
 
   @override
   void initState() { 
@@ -99,24 +105,38 @@ class _VideosListState extends State<VideosList> {
         itemBuilder: (context, i) {
           return new Column(
             children: <Widget>[
-              new FlatButton(
-                child: new Padding(
-                  padding: const EdgeInsets.only(
-                      right: 8, left: 8, bottom: 8),
-                  child: CategoryImage(
-                          this.gameVideos[i].image.smallUrl,
-                          180.0,
-                          320.0
-                        )
+              GestureDetector(
+                child: new FlatButton(
+                  child: new Padding(
+                    padding: const EdgeInsets.only(
+                        right: 8, left: 8, bottom: 8),
+                    child: CategoryImage(
+                            this.gameVideos[i].image.smallUrl,
+                            180.0,
+                            320.0
+                          )
+                  ),
+                  padding: const EdgeInsets.all(0.0),
+                  color: Colors.white,
                 ),
-                padding: const EdgeInsets.all(0.0),
-                onPressed: () async {
-                  String youtubeId = this.gameVideos[i].youtubeId;
-                  String url = Constants.YOUTUBE_URL + youtubeId;
+                onTap: () async {
+                  String apiKey = await AppPreferences.getGBApiKey();
 
-                  await WebLauncher.launchUrl(url);
+                  //await WebLauncher.launchUrl(url);
+                  String gbUrl = this.gameVideos[i].highUrl + '?apikey=$apiKey';
+                  await setupVideoPlayer(true, gbUrl);
                 },
-                color: Colors.white,
+                onLongPress: () async {
+                  String youtubeId = this.gameVideos[i].youtubeId;
+                  if (youtubeId != null && youtubeId.isNotEmpty) {
+                    String url = Constants.YOUTUBE_URL + youtubeId;
+                    await setupVideoPlayer(false, url);
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: Constants.COULD_NOT_LOAD_YOUTUBE_URL
+                    );
+                  }
+                },
               ),
               new Container(
                 width: 100,
@@ -136,6 +156,50 @@ class _VideosListState extends State<VideosList> {
         });
   }
 
+  setupVideoPlayer(bool useInternalPlayer, final String url) async {
+
+    if (useInternalPlayer) {
+      print("GB Video URL: $url");
+
+      if (url != null && url.isNotEmpty) {
+        
+        _videoPlayerController = VideoPlayerController.network(
+                url
+        );
+
+        _chewieController = ChewieController(
+          videoPlayerController: _videoPlayerController,
+          aspectRatio: 3 / 2,
+          autoPlay: true,
+          looping: true,
+        );
+
+        final playerWidget = Chewie(
+          controller: _chewieController,
+        );
+
+        await showDialog(
+          context: context,
+          child: Center(
+            child: playerWidget
+          ),
+        ).then((val){
+            // Navigator.pop(context);
+            playerWidget.controller.pause();
+            _chewieController.dispose();
+        });
+
+      } else {
+        Fluttertoast.showToast(
+          msg: Constants.COULD_NOT_LOAD_GB_URL
+        );
+      }
+    } else {
+      await WebLauncher.launchUrl(url);
+    }
+    
+  }
+
 
   setupVideos(Game game) {
     if (game.videos != null  && game.videos.length != 0) {
@@ -151,5 +215,12 @@ class _VideosListState extends State<VideosList> {
     }
 
     return videosIds;
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
+    super.dispose();
   }
 }
