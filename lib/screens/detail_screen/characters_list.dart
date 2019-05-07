@@ -6,6 +6,7 @@ import 'package:video_game_releases/models/character.dart';
 import 'package:video_game_releases/models/game.dart';
 import 'package:video_game_releases/screens/detail_screen/category_image.dart';
 import 'package:video_game_releases/utils/constants.dart';
+import 'package:video_game_releases/utils/widget_utils/web_launcher.dart';
 
 class CharactersList extends StatefulWidget {
 
@@ -106,14 +107,11 @@ class _CharactersListState extends State<CharactersList> {
                   ),
                 ),
                 padding: const EdgeInsets.all(0.0),
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => GameDetailScreen(
-                  //         gameVideos[i], i.toString()),
-                  //   ),
-                  // );
+                onPressed: () async {
+                  
+                  String characterUrl = this.gameCharacters[i].siteDetailUrl;
+
+                  await WebLauncher.launchUrl(characterUrl);
                 },
                 color: Colors.white,
               ),
