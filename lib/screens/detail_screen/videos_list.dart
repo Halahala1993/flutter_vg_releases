@@ -131,7 +131,8 @@ class _VideosListState extends State<VideosList> {
                               String apiKey = await AppPreferences.getGBApiKey();
 
                               //await WebLauncher.launchUrl(url);
-                              String gbUrl = this.gameVideos[i].highUrl + '?apikey=$apiKey';
+                              String gbUrl = this.gameVideos[i].highUrl + '?api_key=$apiKey';
+                              print("url: $gbUrl");
                               await setupVideoPlayer(true, gbUrl);
                             },
                           ),
@@ -204,7 +205,6 @@ class _VideosListState extends State<VideosList> {
         ).then((val){
             // Navigator.pop(context);
             playerWidget.controller.pause();
-            _chewieController.dispose();
         });
 
       } else {
