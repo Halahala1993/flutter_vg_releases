@@ -9,6 +9,9 @@ class Constants {
   static const String HOMEPAGE_HEADER_FILTERED = "Filtered Results";
   static const String HOMEPAGE_HEADER_SEARCHED = "Search Results";
 
+  static const String YOUTUBE_BOTTOM_SHEET = "Youtube Mirror";
+  static const String DIRECT_VIDEO_BOTTOM_SHEET = "Direct Video";
+
   //Detail Screen Section Headers
   static const String SUMMARY = "Summary";
   static const String SIMILAR_GAMES = "Similar Games";

@@ -105,38 +105,56 @@ class _VideosListState extends State<VideosList> {
         itemBuilder: (context, i) {
           return new Column(
             children: <Widget>[
-              GestureDetector(
-                child: new FlatButton(
-                  child: new Padding(
+              new FlatButton(
+                child: new Padding(
                     padding: const EdgeInsets.only(
                         right: 8, left: 8, bottom: 8),
                     child: CategoryImage(
-                            this.gameVideos[i].image.smallUrl,
-                            180.0,
-                            320.0
-                          )
-                  ),
-                  padding: const EdgeInsets.all(0.0),
-                  color: Colors.white,
+                        this.gameVideos[i].image.smallUrl,
+                        180.0,
+                        320.0
+                    )
                 ),
-                onTap: () async {
-                  String apiKey = await AppPreferences.getGBApiKey();
+                padding: const EdgeInsets.all(0.0),
+                color: Colors.white, onPressed: () {
 
-                  //await WebLauncher.launchUrl(url);
-                  String gbUrl = this.gameVideos[i].highUrl + '?apikey=$apiKey';
-                  await setupVideoPlayer(true, gbUrl);
-                },
-                onLongPress: () async {
-                  String youtubeId = this.gameVideos[i].youtubeId;
-                  if (youtubeId != null && youtubeId.isNotEmpty) {
-                    String url = Constants.YOUTUBE_URL + youtubeId;
-                    await setupVideoPlayer(false, url);
-                  } else {
-                    Fluttertoast.showToast(
-                      msg: Constants.COULD_NOT_LOAD_YOUTUBE_URL
-                    );
-                  }
-                },
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return new Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          new ListTile(
+                            leading: new Icon(Icons.tv),
+                            title: new Text(Constants.DIRECT_VIDEO_BOTTOM_SHEET),
+                            onTap: () async {
+                              String apiKey = await AppPreferences.getGBApiKey();
+
+                              //await WebLauncher.launchUrl(url);
+                              String gbUrl = this.gameVideos[i].highUrl + '?apikey=$apiKey';
+                              await setupVideoPlayer(true, gbUrl);
+                            },
+                          ),
+                          new ListTile(
+                            leading: new Icon(Icons.videogame_asset),
+                            title: new Text(Constants.YOUTUBE_BOTTOM_SHEET),
+                            onTap: () async {
+                              String youtubeId = this.gameVideos[i].youtubeId;
+                              if (youtubeId != null && youtubeId.isNotEmpty) {
+                                String url = Constants.YOUTUBE_URL + youtubeId;
+                                await setupVideoPlayer(false, url);
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: Constants.COULD_NOT_LOAD_YOUTUBE_URL
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                  );
+              },
               ),
               new Container(
                 width: 100,
