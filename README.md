@@ -1,17 +1,11 @@
 # video_game_releases
 [![CircleCI](https://circleci.com/gh/Halahala1993/flutter_vg_releases/tree/master.svg?style=svg&circle-token=e0ed57ae7218299ad2d69038321bfdf71b1e6149)](https://circleci.com/gh/Halahala1993/flutter_vg_releases/tree/master)
 
-A new Flutter project.
+Basic Flutter App to view Video Game information using [GiantBomb's API](https://www.giantbomb.com/api/) and getting familar with the [Flutter Bloc pattern/framework](https://felangel.github.io/bloc/#/).
 
-## Getting Started
+# How to use
+To use the GiantBomb API you first need to acquire an API key
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+* Login or Sign up with GiantBomb [here](https://www.giantbomb.com/signup/)
+* Once logged in, your personal API key can be viewed [here](https://www.giantbomb.com/api/).
+* On first launch of the application a dialog will requets your personal API key, just copy and paste it in there.
